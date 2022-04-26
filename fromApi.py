@@ -178,8 +178,3 @@ class FromApi:
 
         else:
             print('L\'api ne contient que 10 users')
-
-
-
-
-
