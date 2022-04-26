@@ -14,11 +14,7 @@ Application flask
         source  myproject/bin/activate
 
 ```
-#### Pour desactiver  votre environnement faites:
-```bash
-        deactivate
 
-```
 
 #### Installation des paquets necessaires
 ```bash
@@ -29,5 +25,11 @@ Application flask
 #### Executez le fichier index avec la commande suivante pour lancer l'application
 ```bash
         python3 index.py
+
+```
+
+#### Pour desactiver  votre environnement faites:
+```bash
+        deactivate
 
 ```
