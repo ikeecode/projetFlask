@@ -182,7 +182,4 @@ class FromApi:
 
 
 
-FromApi.prepare_users(10)
-FromApi.prepare_posts(user_id=1)
 
-FromApi.prepare_todos(1)
