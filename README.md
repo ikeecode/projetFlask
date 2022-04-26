@@ -3,7 +3,20 @@ Application flask
 
 #### Création d'un environnement virtuel avec python
 ```bash
-        python3 -m venv nom_de_votre_environnement_virtuel
+        python3 -m venv myproject
+
+```
+
+> ! se placer dans le dossier qui contient  myproject
+
+#### Activation de votre environnement
+```bash
+        source  myproject/bin/activate
+
+```
+#### Pour desactiver  votre environnement faites:
+```bash
+        deactivate
 
 ```
 
