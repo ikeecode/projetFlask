@@ -1,0 +1,45 @@
+div#subBody{
+  /* background-color: red; */
+  height: 700px;
+  width: 70vw;
+  /* border: 2px solid; */
+  align-self: flex-end;
+}
+
+ul#postholder{
+  list-style-type: none;
+  width: 100%;
+  height: 100%;
+  /* background-color: green; */
+  overflow: scroll;
+}
+ul#postholder li{
+  /* border: 2px solid; */
+  /* text-align: center; */
+  height: 5vh;
+  width: 40vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+li a{
+  text-decoration: none;
+  color: black;
+}
+
+form{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  /* border: 2px solid red; */
+}
+
+form input{
+  width: 100px;
+  height: 50px;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25);
+
+}

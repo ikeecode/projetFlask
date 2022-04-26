@@ -1,0 +1,71 @@
+legend {
+    background-color: grey;
+    color: #fff;
+    padding: 3px 6px;
+}
+
+fieldset{
+  /* padding: 10px; */
+  width: 50%;
+  height: 100%;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+div.parentAC{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+}
+
+div.parentBrother{
+    width: 100%;
+    align-self: flex-end;
+}
+
+div.parentBrother fieldset{
+  width: 100%;
+
+}
+
+fieldset.addressInfo{
+  /* height: 50%; */
+}
+
+fieldset.companyInfo{
+  /* height: 50%; */
+}
+
+fieldset.companyInfo input{
+  width: 60%;
+  height: 22px;
+}
+fieldset.addressInfo input{
+  width: 60%;
+  height: 22px;
+}
+
+
+.mainForm{
+  height: 120vh;
+  width: 100%;
+}
+
+.button_valider{
+  height: 100px;
+  width: 250px;
+  font-size: 22px;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
