@@ -1,48 +1,73 @@
-
-div#subBody{
-  /* background-color: red; */
-  height: 700px;
-  width: 70vw;
-  /* border: 2px solid; */
-  align-self: flex-end;
+div#subBody {
+    height: 700px;
+    width: 70vw;
+    align-self: flex-end;
 }
 
-ul#postholder{
-  list-style-type: none;
-  width: 100%;
-  height: 50vh;
-  /* background-color: green; */
-  overflow-y: scroll;
+h4 {
+    text-align: center;
+    font-size: x-large;
 }
 
-ul#postholder li{
-  /* border: 2px solid; */
-  /* text-align: center; */
-  height: 5vh;
-  width: 40vw;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
+ul#postholder {
+    list-style-type: none;
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
 }
 
-li a{
-  text-decoration: none;
-  color: black;
+ul#postholder li {
+    border: 2px solid #000000;
+    background-color: #e7e7e7;
+    margin: 15px 5px;
+    display: flex;
+    justify-content: space-between;
 }
 
-form{
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  /* border: 2px solid red; */
+li a,
+li select {
+    margin: 5px;
+    text-decoration: none;
+    color: black;
 }
 
-form input{
-  width: 100px;
-  height: 50px;
-  font-size: 22px;
-  font-weight: bold;
-  box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25);
+form {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 20px;
+    justify-content: space-around;
+}
 
+form input {
+    width: 80px;
+    height: 40px;
+    font-size: 20px;
+    box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25)
+}
+
+#edit img,
+#trash img {
+    height: 23px;
+    width: 15px;
+}
+
+li #id {
+    width: 5%;
+}
+
+#etatNote {
+    margin-top: 8px;
+    width: 15%;
+    height: 20px;
+}
+
+li #title {
+    width: 65%;
+}
+
+li #edit,
+li #trash {
+    width: 5%;
 }

@@ -1,30 +1,31 @@
-{% extends 'user_index.html' %}
-
-{% block title %}
-  Todos de {{ current_user.name }}
-{% endblock title %}
-
-{% block sectionRight %}
+{% extends 'user_index.html' %} {% block title %} Todos de {{ current_user.name }} {% endblock title %} {% block sectionRight %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/todos.css') }}">
 <div id="subBody">
-  <form class="" action="" method="post">
-    <input type="submit" name="submit-button" value="charger">
-    <input type="submit" name="submit-button" value="ajouter">
-  </form>
-  <br><br>
-  {% if current_user_items %}
+    <form class="" action="" method="post">
+        <input type="submit" name="submit-button" value="charger">
+        <input type="submit" name="submit-button" value="ajouter">
+    </form>
+    <br><br> {% if current_user_items %}
     <h4>les Todos de {{ current_user.name }} </h4>
-  <ul id="postholder">
-    {% for i in range(itemLength) %}
-      <li>
-        <a href="#">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
-        <br>
-        <a href="#">{{ current_user_items[i].body }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-      <h4>There is no posts in the Database</h4>
-  {% endif %}
+    <ul id="postholder">
+        {% for i in range(itemLength) %}
+        <li>
+            <select id="etatNote" name="etat">
+            <option value="etatTodo">ÉTAT</option>
+            <option value="true">À faire</option>
+            <option value="false">En cours</option>
+            <option value="true">Terminé</option>
+          </select>
+            <!-- <a id="id" href="#">{{ i + 1 }}</a> -->
+
+            <a id="title" href="#">{{ current_user_items[i].title }}</a>
+            <a id="edit" href="#"> <img src="{{url_for('static', filename='img/edit.svg')}}" alt="phototProfil"></a>
+            <a id="trash" href="#"> <img src="{{url_for('static', filename='img/trash.svg')}}" alt="phototProfil"></a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h4>There is no posts in the Database</h4>
+    {% endif %}
 </div>
 {% endblock sectionRight %}
