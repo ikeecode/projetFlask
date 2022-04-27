@@ -178,3 +178,11 @@ class FromApi:
 
         else:
             print('L\'api ne contient que 10 users')
+
+
+
+
+FromApi.prepare_users(10)
+FromApi.prepare_posts(user_id=1)
+
+FromApi.prepare_todos(1)
