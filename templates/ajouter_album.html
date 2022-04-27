@@ -1,0 +1,10 @@
+{% extends 'user_index.html' %}
+
+{% block sectionRight %}
+<button type="button" class="btn retour btn-lg"><a href="{{ url_for('chargementUser') }}">Retour</a></button>
+{% if current_user.idApi %}
+  <h4>vous pouvez ajouter des albums de fromAPI  {{ current_user.idApi }}</h4>
+{% else %}
+  <h4>vous pouvez ajouter des albums de {{ current_user.id }}</h4>
+{% endif %}
+{% endblock sectionRight %}

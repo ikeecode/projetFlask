@@ -1,0 +1,26 @@
+{% extends 'user_index.html' %}
+
+{% block title %}
+  Post de {{ current_user.name }}
+{% endblock title %}
+
+{% block sectionRight %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+<div id="subBody">
+  <form class="" action="" method="post">
+    <input type="submit" name="submit-button" value="charger">
+    <input type="submit" name="submit-button" value="ajouter">
+  </form>
+  <br><br>
+  {% if current_user_items %}
+    <h4>les posts de {{ current_user.name }} </h4>
+  <ul id="postholder">
+    {% for i in range(itemLength) %}
+      <li><a href="#">{{ i + 1 }}.  {{ current_user_items[i].title | capitalize }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+      <h4>There is no posts in the Database</h4>
+  {% endif %}
+</div>
+{% endblock sectionRight %}

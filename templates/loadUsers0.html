@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pageBody">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/loadUsers.css')}}">
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+<div class="heading">
+  <button type="button" class="btn  btn-lg"><a href="{{ url_for('ajouter_user') }}">Ajouter User</a></button>
+  <button id= "submitBtn" type="button" class="btn  btn-lg"><a href="{{ url_for('chargementUser') }}">Charger User</a></button>
+</div>
+<form id="changementUser" class="" action="" method="post">
+  {{ genForm.hidden_tag() }}
+  <!-- {{ genForm.generatorBtn }} -->
+  <br>
+  {{ genForm.numberChosen(class="form-control") }}
+</form>
+<br>
+  <table class="table usersDisplayField">
+    <h3>Liste des Users</h3>
+    <thead>
+      <th>id</th>
+      <th>name</th>
+      <th>username</th>
+      <th>email</th>
+      <th>website</th>
+    </thead>
+      {% for i in range(userLength) if i < number %}
+      <!-- on va mettre dans les liens un url_for('connexion', email=myusers[i].email) -->
+          <tr>
+            <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].id }}</a></td>
+            <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].name }}</a></td>
+            <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].username }}</a></td>
+            <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].email }}</a></td>
+            <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].website }}</a></td>
+          </tr>
+      {% endfor %}
+  </table>
+  <script src="{{ url_for('static', filename= 'js/loadUsers.js')}}" charset="utf-8"></script>
+</div>
+{% endblock %}

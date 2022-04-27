@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+<div class="body">
+  {% block content %}
+  <h1><p> AJOUTER UN USER </p></h1>
+
+    <br>
+    <br>
+    <br>
+
+    <form class="mainForm" action="" method="post">
+      <div class="parentAC">
+        <fieldset class="addressInfo">
+          <legend>Infos address</legend>
+            {{ formAddress.hidden_tag() }}
+            {{ formAddress.street.label(class="form-label") }}
+            {{ formAddress.street(class="form-control") }}
+            <br>
+            {{ formAddress.suite.label(class="form-label") }}
+            {{ formAddress.suite(class="form-control") }}
+            <br>
+            {{ formAddress.city.label(class="form-label") }}
+            {{ formAddress.city(class="form-control") }}
+            <br>
+            {{ formAddress.zipcode.label(class="form-label") }}
+            {{ formAddress.zipcode(class="form-control") }}
+            <br>
+            {{ formAddress.lat.label(class="form-label") }}
+            {{ formAddress.lat(class="form-control") }}
+            <br>
+            {{ formAddress.lng.label(class="form-label") }}
+            {{ formAddress.lng(class="form-control") }}
+        </fieldset>
+        <fieldset class="companyInfo">
+          <legend>Infos company</legend>
+            {{ formCompany.hidden_tag() }}
+            {{ formCompany.name.label(class="form-label") }}
+            {{ formCompany.name(class="form-control") }}
+            <br>
+            {{ formCompany.catchPhrase.label(class="form-label") }}
+            {{ formCompany.catchPhrase(class="form-control") }}
+            <br>
+            {{ formCompany.bs.label(class="form-label") }}
+            {{ formCompany.bs(class="form-control") }}
+        </fieldset>
+      </div>
+      <br>
+      <div class="parentBrother">
+        <fieldset class="userInfo">
+          <legend>Informations Utilisateur</legend>
+            {{ formUser.hidden_tag() }}
+            {{ formUser.nameUser.label(class="form-label") }}
+            {{ formUser.nameUser(class="form-control") }}
+            <br>
+            {{ formUser.email.label(class="form-label") }}
+            {{ formUser.email(class="form-control") }}
+            <br>
+            {{ formUser.username.label(class="form-label") }}
+            {{ formUser.username(class="form-control") }}
+            <br>
+            {{ formUser.website.label(class="form-label") }}
+            {{ formUser.website(class="form-control") }}
+            <br>
+            {{ formUser.password.label(class="form-label") }}
+            {{ formUser.password(class="form-control") }}
+            <br>
+            {{ formUser.phone.label(class="form-label") }}
+            {{ formUser.phone(class="form-control") }}
+        </fieldset>
+      </div>
+        <br>
+      <div class="footer">
+        {{ formUser.submit(class="button_valider") }}
+      </div>
+    </form>
+  {% endblock %}
+
+</div>

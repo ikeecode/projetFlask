@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pageBody">
+  <button type="button" class="btn retour btn-lg"><a href="{{ url_for('chargementUser') }}">Retour</a></button>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <section>
+      {{ form.login.label(class="") }}
+      {{ form.login(class="") }}
+    </section>
+    <section>
+      {{ form.password.label(class="") }}
+      {{ form.password(class="") }}
+    </section>
+    {{ form.logBtn }}
+  </form>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+</div>
+{% endblock %}
