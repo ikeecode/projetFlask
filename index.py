@@ -1,13 +1,13 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, abort
-from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, PasswordField, SubmitField, IntegerField
-from wtforms.validators import InputRequired, NumberRange
-from models.users import (User, Address, Company, Post, app, db)
+
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
-from fromApi import FromApi as fp
+from folium import Map, Marker
 from random import randint
 from string import ascii_letters
+from fromApi import FromApi as fp
+from models.users import (User, Address, Company, Post, app, db)
+from forms import *
 
 # from models.users import app, db
 app = Flask(__name__)
@@ -36,41 +36,7 @@ def randomPassword():
 
     return password
 
-class GeneratorForm(FlaskForm):
-    numberChosen = IntegerField('', validators=[InputRequired()])
-    # generatorBtn = SubmitField('Charger des users')
 
-class UserForm(FlaskForm):
-    nameUser  = StringField('Name', validators=[InputRequired()])
-    username  = StringField('Username', validators=[InputRequired()])
-    email     = StringField('Email', validators=[InputRequired()])
-    phone     = IntegerField('Phone', validators=[InputRequired(), NumberRange(min=0, max=1_000_000)])
-    website   = StringField('Website', validators=[InputRequired()])
-    password  = PasswordField('Password', validators=[InputRequired()])
-    submit    = SubmitField('Valider les informations')
-
-class AddressForm(FlaskForm):
-    street   = StringField('Street', validators=[InputRequired()])
-    suite    = StringField('Suite', validators=[InputRequired()])
-    city     = StringField('City', validators=[InputRequired()])
-    zipcode  = StringField('Zipcode', validators=[InputRequired()])
-    lat      = FloatField('Latitude', validators=[InputRequired()])
-    lng      = FloatField('Longitude', validators=[InputRequired()])
-
-class CompanyForm(FlaskForm):
-    name        = StringField('Name ', validators=[InputRequired()])
-    catchPhrase = StringField('Catch Phrase ', validators=[InputRequired()])
-    bs          = StringField('Bs ', validators=[InputRequired()])
-
-class LoginForm(FlaskForm):
-    login = StringField('Login', validators=[InputRequired()])
-    password = PasswordField('Password', validators=[InputRequired()])
-
-    logBtn = SubmitField('Se connecter')
-
-
-class Charger(FlaskForm):
-    charger = SubmitField('Charger')
 
 
 # la page principale
@@ -144,8 +110,9 @@ def logIn():
 @app.route('/menu/', methods=['GET', 'POST'])
 @login_required
 def userMenu():
-    mon_menu = ['post', 'todos', 'albums', 'info user']
+    mon_menu = ['post', 'todos', 'albums', 'infosuser']
     return render_template('user_menu.html', mon_menu=mon_menu)
+
 
 # se deconnecter
 @app.route('/logout/', methods=['GET', 'POST'])
@@ -155,6 +122,19 @@ def logOut():
     flash('You have been logged out !')
     return redirect(url_for('logIn'))
 
+@app.route('/menu/menuItem/infos user/carte')
+@login_required
+def folium_map():
+    user_address = Address.query.get(current_user.id)
+    coordonnees = (user_address.lat, user_address.lng)
+    tooltip = 'Appuyer'
+    message = 'Vous etes chez ' + current_user.name
+    folium_map  = Map(location=coordonnees, zoom_start=10, tiles ='OpenStreetMap')
+    Marker(coordonnees, popup=f"<strong>{message}</strong>", tooltip=tooltip).add_to(folium_map)
+
+    return folium_map._repr_html_()
+
+
 @app.route('/menu/menuItem/<string:item>', methods=['GET', 'POST'])
 @login_required
 def menuItem(item):
@@ -162,7 +142,16 @@ def menuItem(item):
     itemLength = 0
     # visitez la page post
     # les items sont les options du menu
-    if item == 'post':
+
+    if item == 'infosuser':
+        user_address = Address.query.get(current_user.id)
+        user_company = Company.query.get(current_user.id)
+        return render_template(
+                'infos_user.html',
+                user_address=user_address,
+                user_company=user_company,
+        )
+    elif item == 'post':
         # chargerPost = Charger()
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
@@ -175,16 +164,11 @@ def menuItem(item):
                 current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().posts
                 itemLength = len(current_user_items)
 
-                # print('la longueur ======',itemLength,current_user_items)
                 return render_template(
                     "post.html",
                     current_user_items=current_user_items,
                     itemLength=itemLength
                 )
-
-
-
-                # return redirect(url_for('menuItem', item='post', current_user_items=current_user_items, itemLength=itemLength))
 
             elif request.form['submit-button'] == 'ajouter':
                 if current_user.idApi:
@@ -196,21 +180,49 @@ def menuItem(item):
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
                 try:
-                    fp.prepare_todos(user_id=current_user.idApi)
+                    fp.prepare_todos(user_id=current_user.idApi) #this change
                 except:
                     flash('Todos of '+ current_user.email + ' already loaded ')
 
-                current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().todos
+                current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().todos #this change
                 itemLength = len(current_user_items)
 
-                return render_template("todos.html", current_user_items=current_user_items, itemLength=itemLength)
+                return render_template(
+                    "todos.html", #this change
+                    current_user_items=current_user_items,
+                    itemLength=itemLength
+                )
 
             elif request.form['submit-button'] == 'ajouter':
                 if current_user.idApi:
-                    return redirect(url_for('ajouterTodo'))
+                    return redirect(url_for('ajouterTodo')) #this change
                 else:
-                    return redirect(url_for('ajouterTodo'))
-            return render_template("todos.html", current_user_items=current_user_items, itemLength=itemLength)
+                    return redirect(url_for('ajouterTodo')) #this change
+            return render_template(
+                "todos.html", #this change
+                current_user_items=current_user_items,
+                itemLength=itemLength
+            )
+
+    elif item == 'albums':
+        if request.method == 'POST':
+            if request.form['submit-button'] == 'charger':
+                try:
+                    fp.prepare_albums(user_id=current_user.idApi)
+                except:
+                    flash('Albums of '+ current_user.email + ' already loaded ')
+
+                current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
+                itemLength = len(current_user_items)
+
+                return render_template("albums.html", current_user_items=current_user_items, itemLength=itemLength)
+
+            elif request.form['submit-button'] == 'ajouter':
+                if current_user.idApi:
+                    return redirect(url_for('ajouterAlbum'))
+                else:
+                    return redirect(url_for('ajouterAlbum'))
+            return render_template("albums.html", current_user_items=current_user_items, itemLength=itemLength)
 
 
     return render_template(f"{item}.html", current_user_items=current_user_items, itemLength=itemLength)
@@ -220,6 +232,18 @@ def menuItem(item):
 @login_required
 def ajouterPost():
     return render_template('ajouter_post.html')
+
+
+@app.route('/ajout/todo', methods=['GET', 'POST'])
+@login_required
+def ajouterTodo():
+    return render_template('ajouter_todo.html')
+
+
+@app.route('/ajout/album', methods=['GET', 'POST'])
+@login_required
+def ajouterAlbum():
+    return render_template('ajouter_album.html')
 
 @app.route('/ajout/user', methods=['GET', 'POST'])
 def ajouter_user():

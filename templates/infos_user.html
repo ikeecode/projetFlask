@@ -1,0 +1,97 @@
+{% extends 'user_index.html' %}
+
+{% block title %}
+  Infos de {{ current_user.name }}
+{% endblock title %}
+
+{% block sectionRight %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/infos_user.css') }}">
+<div id="subBody">
+  <form class="" action="" method="post">
+    <input type="submit" name="submit-button" value="charger">
+    <input type="submit" name="submit-button" value="ajouter">
+  </form>
+  <br><br>
+  <div class="infos_user">
+    <table id="direct_info">
+      <thead>
+        <th colspan="2">Utilisateur</th>
+      </thead>
+      <tr>
+        <td class="head">Name: </td>
+        <td class="value">{{ current_user.name }}</td>
+      </tr>
+      <tr>
+        <td class="head">Username: </td>
+        <td class="value">{{ current_user.username }}</td>
+      </tr>
+      <tr>
+        <td class="head">Email: </td>
+        <td class="value">{{ current_user.email }}</td>
+      </tr>
+      <tr>
+        <td class="head">Phone: </td>
+        <td class="value">{{ current_user.phone }}</td>
+      </tr>
+      <tr>
+        <td class="head">website: </td>
+        <td class="value">{{ current_user.website }}</td>
+      </tr>
+      <tr>
+        <td class="head">Password: </td>
+        <td class="value">{{ current_user.password }}</td>
+      </tr>
+    </table>
+    <table id="address_user">
+      <thead>
+        <th colspan="2">Address de {{ current_user.name }}</th>
+      </thead>
+      <tr>
+        <td class="head">Street: </td>
+        <td class="value">{{ user_address.street }}</td>
+      </tr>
+      <tr>
+        <td class="head">Suite: </td>
+        <td class="value">{{ user_address.suite }}</td>
+      </tr>
+      <tr>
+        <td class="head">City: </td>
+        <td class="value">{{ user_address.city }}</td>
+      </tr>
+      <tr>
+        <td class="head">Zipcode: </td>
+        <td class="value">{{ user_address.zipcode }}</td>
+      </tr>
+      <tr>
+        <td class="head">Latitude: </td>
+        <td class="value">{{ user_address.lat }}</td>
+      </tr>
+      <tr>
+        <td class="head">Longitude: </td>
+        <td class="value">{{ user_address.lng }}</td>
+      </tr>
+    </table>
+    <table id="company_user">
+      <thead>
+        <th colspan="2">Company de {{ current_user.name }}</th>
+      </thead>
+      <tr>
+        <td class="head">Name: </td>
+        <td class="value">{{ user_company.name }}</td>
+      </tr>
+      <tr>
+        <td class="head">Catch phrase: </td>
+        <td class="value">{{ user_company.catchPhrase }}</td>
+      </tr>
+      <tr>
+        <td class="head">Bs: </td>
+        <td class="value">{{ user_company.bs }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="map">
+    <embed type="text/html" src="{{ url_for('folium_map') }}">
+  </div>
+</div>
+{% endblock sectionRight %}
