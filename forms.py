@@ -38,3 +38,15 @@ class LoginForm(FlaskForm):
 
 class Charger(FlaskForm):
     charger = SubmitField('Charger')
+
+class PostForm(FlaskForm):
+    pass
+
+class CommentForm(FlaskForm):
+    pass
+
+class AlbumForm(FlaskForm):
+    pass
+
+class PhotoForm(FlaskForm):
+    pass 
