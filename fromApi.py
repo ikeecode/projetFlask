@@ -6,35 +6,78 @@ from models.users import *
 from json import load
 
 class FromApi:
-    # api_url  = 'https://jsonplaceholder.typicode.com/'
+    api_url  = 'https://jsonplaceholder.typicode.com/'
     # api_url  = '../users.json' # offline work
     # api_url  = '../posts.json' # offline work
 
     compteur = 0
 
-    # # online work
-    # @classmethod
-    # def api_to_json(cls, url):
-    #     return requests.get(cls.api_url + url).json()
-
-    # offline work
+    # online work
     @classmethod
     def api_to_json(cls, url):
-        with open(f"../{url}.json", 'r') as file:
-            return load(file)
+        try:
+            response = requests.get(cls.api_url + url).json()
+            return response
+        except:
+            print('Verifiez la connexion')
+
+
+    # # offline work
+    # @classmethod
+    # def api_to_json(cls, url):
+    #     with open(f"../{url}.json", 'r') as file:
+    #         return load(file)
+
+
+    @classmethod
+    def prepare_photos(cls, album_id):
+        endpoint = f'albums/{album_id}/photos'
+        photos   = cls.api_to_json(endpoint)
+        for photo in photos:
+            photo_instance    = Photo(
+                albumId       = photo.get('albumId'),
+                title         = photo.get('title'),
+                url           = photo.get('url'),
+                thumbnail_url = photo.get('thumbnailUrl')
+            )
+
+            db.session.add(photo_instance)
+
+
+    @classmethod
+    def prepare_albums(cls, user_id):
+        endpoint = f'users/{user_id}/albums'
+        albums = cls.api_to_json(endpoint)
+        for album in albums:
+            album_instance = Album(
+                userId = album.get('userId'),
+                idApi  = album.get('id'),
+                title  = album.get('title')
+            )
+            # print(album_instance)
+            db.session.add(album_instance)
+            album_id = album.get('id')
+            cls.prepare_photos(album_id)
+
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+
 
     @classmethod
     def prepare_todos(cls, user_id):
-        todos = cls.api_to_json('todos')
+        endpoint = f'users/{user_id}/todos/'
+        todos = cls.api_to_json(endpoint)
         for todo in todos:
-            if todo.get('userId') == user_id:
-                todo_instance = Todo(
-                    userId    = todo.get('userId'),
-                    title     = todo.get('title'),
-                    completed = todo.get('completed')
-                )
-                # print(todo_instance)
-                db.session.add(todo_instance)
+            todo_instance = Todo(
+                userId    = todo.get('userId'),
+                title     = todo.get('title'),
+                completed = todo.get('completed')
+            )
+            # print(todo_instance)
+            db.session.add(todo_instance)
         try:
             db.session.commit()
         except:
@@ -44,51 +87,48 @@ class FromApi:
 
     @classmethod
     def prepare_comments(cls, post_id):
-        comments = cls.api_to_json('comments')
+        endpoint = f'posts/{post_id}/comments/'
+        comments = cls.api_to_json(endpoint)
         for comment in comments:
-            if comment.get('postId') == post_id:
-                comment_instance = Comment(
-                        postId   = comment.get('postId'),
-                        name     = comment.get('name'),
-                        email    = comment.get('email'),
-                        body     = comment.get('body')
-                )
-
-                db.session.add(comment_instance)
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-
+            comment_instance = Comment(
+                    postId   = comment.get('postId'),
+                    name     = comment.get('name'),
+                    email    = comment.get('email'),
+                    body     = comment.get('body')
+            )
+            # print(comment_instance)
+            db.session.add(comment_instance)
 
 
     @classmethod
     def prepare_posts(cls, user_id):
-        posts = cls.api_to_json('posts')
-        post_id = ''
+        endpoint = f'users/{user_id}/posts/'
+        posts = cls.api_to_json(endpoint)
         for i, post in enumerate(posts):
-            if post.get('userId') == user_id:
-                post_instance = Post(
-                    userId    = post.get('userId'),
-                    idApi     = post.get('id'),
-                    fromApi   = True,
-                    title     = post.get('title'),
-                    body      = post.get('body')
-                )
-                post_id = post.get('id')
-                db.session.add(post_instance)
+            post_instance = Post(
+                userId    = post.get('userId'),
+                idApi     = post.get('id'),
+                fromApi   = True,
+                title     = post.get('title'),
+                body      = post.get('body')
+            )
+            db.session.add(post_instance)
+            post_id = post.get('id')
+            # print(post_id)
+            # print('chargement des commentaires du posts ' + str(post_id))
+            cls.prepare_comments(post_id)
+
         try:
             db.session.commit()
         except:
             db.session.rollback()
-        cls.prepare_comments(post_id)
 
 
     @classmethod
     def prepare_users(cls, number):
 
-        # users = cls.api_to_json('users') #online work
-        users = cls.api_to_json('users') #offline work
+        users = cls.api_to_json('users') #online work
+        # users = cls.api_to_json('users') #offline work
 
         compteur = 0
 
@@ -98,7 +138,7 @@ class FromApi:
 
         if number <= len(users):
             for i, user in enumerate(users):
-                if cls.compteur == number + 1 :
+                if cls.compteur == number:
                     print('stop'*10)
                     break
                 # print('number', number, 'compteur', cls.compteur)
@@ -119,10 +159,9 @@ class FromApi:
 
                 # print(address_instance)
                 if address_instance.suite not in addressInDB:
+                    db.session.add(address_instance)
                     try:
-                        db.session.add(address_instance)
                         db.session.commit()
-
                     except:
                         db.session.rollback()
 
@@ -135,12 +174,12 @@ class FromApi:
                         catchPhrase = company.get('catchPhrase'),
                         bs          = company.get('bs')
                 )
-
+                print(company_instance)
                 # print(company_instance)
 
                 if company_instance.name not in companyInDB:
+                    db.session.add(company_instance)
                     try:
-                        db.session.add(company_instance)
                         db.session.commit()
                     except:
                         db.session.rollback()
@@ -154,7 +193,7 @@ class FromApi:
                 companyId = Company.query.filter_by(name=company.get('name')).first().id
 
                 ## create user object
-                user_instance = User(
+                user_instance     = User(
                         name      = user.get('name'),
                         idApi     = user.get('id'),
                         fromApi   = True,
@@ -182,7 +221,7 @@ class FromApi:
 
 
 
-FromApi.prepare_users(10)
-FromApi.prepare_posts(user_id=1)
-
-FromApi.prepare_todos(1)
+# FromApi.prepare_users(number=1)
+# FromApi.prepare_posts(user_id=1)
+# FromApi.prepare_todos(user_id=1)
+# FromApi.prepare_albums(1)

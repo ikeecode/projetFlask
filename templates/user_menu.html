@@ -18,7 +18,7 @@
   <div class="left">
     {% if current_user.is_authenticated %}
     <figure>
-      <img src="{{ url_for('static', filename='img/avatar.svg')}}" alt="">
+      <img src="{{ url_for('static', filename='img/avatar.svg') }}" alt="">
       <figcaption>{{ current_user.email  }}</figcaption>
     </figure>
     {% endif %}
