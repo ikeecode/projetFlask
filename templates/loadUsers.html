@@ -29,8 +29,7 @@
       <th>email</th>
       <th>website</th>
     </thead>
-      {% for i in range(userLength) if i < number %}
-      <!-- on va mettre dans les liens un url_for('connexion', email=myusers[i].email) -->
+      {% for i in range(userLength) if i < 5 %}
           <tr>
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].id }}</a></td>
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].name }}</a></td>

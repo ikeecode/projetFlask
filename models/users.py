@@ -81,22 +81,24 @@ class Todo(db.Model):
 class Album(db.Model):
     __tablename__ ='albums'
     userId    = db.Column(db.Integer, db.ForeignKey('users.idApi'), nullable=False)
+    idApi     = db.Column(db.Integer, nullable=True, unique=True)
     id        = db.Column(db.Integer, primary_key=True, nullable=False)
     title     = db.Column(db.String(200), nullable=False, unique=True)
     photos    = db.relationship('Photo', backref='albums', cascade='all, delete-orphan')
 
     def __str__(self):
-        return f"Album(userId:{self.userId}, id:{self.id}, title:{self.title})"
+        return f"Album(userId:{self.userId}, id:{self.id},  idApi:{self.idApi}, title:{self.title})"
+
 
 
 
 class Photo(db.Model):
     __tablename__ ='photos'
-    albumId      = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
-    id           = db.Column(db.Integer, primary_key=True, nullable=False)
-    title        = db.Column(db.String(200), nullable=False)
-    url          = db.Column(db.String(200), nullable=False)
-    thumbnailUrl = db.Column(db.LargeBinary, nullable=False)
+    albumId       = db.Column(db.Integer, db.ForeignKey('albums.idApi'), nullable=False)
+    id            = db.Column(db.Integer, primary_key=True, nullable=False)
+    title         = db.Column(db.String(200), nullable=False)
+    url           = db.Column(db.String(200), nullable=False)
+    thumbnailurl = db.Column(db.String(200), nullable=False)
 
     def __str__(self):
         return f"Photo(albumId:{self.albumId}, id:{self.id}, title:{self.title}, url:{self.url})"

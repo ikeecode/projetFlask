@@ -38,7 +38,7 @@ class FromApi:
                 albumId       = photo.get('albumId'),
                 title         = photo.get('title'),
                 url           = photo.get('url'),
-                thumbnail_url = photo.get('thumbnailUrl')
+                thumbnailurl = photo.get('thumbnailUrl')
             )
 
             db.session.add(photo_instance)

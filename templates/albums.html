@@ -17,9 +17,7 @@
   <ul id="postholder">
     {% for i in range(itemLength) %}
       <li>
-        <a href="#">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
-        <br>
-        <a href="#">{{ current_user_items[i].body }}</a>
+        <a href="{{ url_for('view_photos', album_id= current_user_items[i].idApi ) }}">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
       </li>
     {% endfor %}
   </ul>

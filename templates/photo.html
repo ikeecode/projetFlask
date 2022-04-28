@@ -1,0 +1,16 @@
+{% extends 'user_index.html' %}
+
+{% block title %}
+  Todos de {{ current_user.name }}
+{% endblock title %}
+
+{% block sectionRight %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/photo.css') }}">
+<div id="subBody">
+  <figure>
+    <img src="{{ photo.url }}" alt="{{ photo.title }}">
+    <figcaption>{{ photo.title }}</figcaption>
+
+  </figure>
+</div>
+{% endblock sectionRight %}

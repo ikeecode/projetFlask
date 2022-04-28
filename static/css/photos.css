@@ -1,0 +1,43 @@
+div#subBody {
+    /* height: 50vh;*/
+    width: 70vw;
+    height: 700px;
+    align-self: flex-end;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+h4 {
+    text-align: center;
+    font-size: x-large;
+}
+
+ul#postholder{
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* width: 70vw;
+  height: 200px; */
+}
+
+img:hover{
+  opacity: 0.5;
+  width: 153px;
+  height: 153px;
+}
+
+figure{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+ul li{
+  margin: 2px 0px 4px 0px;
+}

@@ -1,0 +1,25 @@
+{% extends 'user_index.html' %}
+
+{% block title %}
+  Todos de {{ current_user.name }}
+{% endblock title %}
+
+{% block sectionRight %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/photos.css') }}">
+<div id="subBody">
+  {% if photos %}
+  <ul id="postholder">
+    {% for i in range(photosLength) %}
+        <li>
+          <figure>
+            <a href="{{ url_for('view', photo_id= photos[i].id ) }}"><img src="{{ photos[i].thumbnailurl }}" alt=""></a>
+            <figcaption>{{ photos[i].title[:10] }}</figcaption>
+          </figure>
+        </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+      <h4>There is no Albums in the Database</h4>
+  {% endif %}
+</div>
+{% endblock sectionRight %}
