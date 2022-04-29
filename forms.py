@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, PasswordField, SubmitField, IntegerField
+# from flask_wtf.file import FileField
+from wtforms import StringField, FloatField, PasswordField, SubmitField, IntegerField, TextAreaField, EmailField, TelField, URLField
 from wtforms.validators import InputRequired, NumberRange
-
 
 class GeneratorForm(FlaskForm):
     numberChosen = IntegerField('', validators=[InputRequired()])
@@ -10,8 +10,8 @@ class GeneratorForm(FlaskForm):
 class UserForm(FlaskForm):
     nameUser  = StringField('Name', validators=[InputRequired()])
     username  = StringField('Username', validators=[InputRequired()])
-    email     = StringField('Email', validators=[InputRequired()])
-    phone     = IntegerField('Phone', validators=[InputRequired(), NumberRange(min=0, max=1_000_000)])
+    email     = EmailField('Email', validators=[InputRequired()])
+    phone     = TelField('Phone', validators=[InputRequired()])
     website   = StringField('Website', validators=[InputRequired()])
     password  = PasswordField('Password', validators=[InputRequired()])
     submit    = SubmitField('Valider les informations')
@@ -40,13 +40,27 @@ class Charger(FlaskForm):
     charger = SubmitField('Charger')
 
 class PostForm(FlaskForm):
-    pass
+    title = StringField('Title', validators=[InputRequired()])
+    body  = TextAreaField('Body', validators=[InputRequired()])
+    addBtn = SubmitField('Ajouter')
+
 
 class CommentForm(FlaskForm):
-    pass
+    name = StringField('Name', validators=[InputRequired()])
+    email = EmailField('Email', validators=[InputRequired()])
+    body  = TextAreaField('Body', validators=[InputRequired()])
+    addBtn = SubmitField('Ajouter')
+
+
 
 class AlbumForm(FlaskForm):
-    pass
+    title = StringField('Title', validators=[InputRequired()])
+    addBtn = SubmitField('Ajouter')
+
 
 class PhotoForm(FlaskForm):
-    pass 
+    title = StringField('Title', validators=[InputRequired()])
+    url   = URLField('Photo url', validators=[InputRequired()])
+    thumbnailurl = URLField('Thumbnail url', validators=[InputRequired()])
+    addBtn = SubmitField('Ajouter')
+    
