@@ -196,6 +196,8 @@ def menuItem(item):
         )
     elif item == 'post':
         # chargerPost = Charger()
+        current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().posts
+        itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
                 # print('clicked ')
@@ -219,8 +221,15 @@ def menuItem(item):
                     return redirect(url_for('ajouterPost'))
                 else:
                     return redirect(url_for('ajouterPost'))
+            return render_template(
+                "post.html",
+                current_user_items=current_user_items,
+                itemLength=itemLength
+            )
 
     elif item == 'todos':
+        current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().todos #this change
+        itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
                 try:
@@ -250,15 +259,17 @@ def menuItem(item):
             )
 
     elif item == 'albums':
+        current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
+        itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
-                fp.prepare_albums(user_id=current_user.idApi)
-                #
-                # try:
-                #     fp.prepare_albums(user_id=current_user.idApi)
-                # except:
-                #     # flash('Albums of '+ current_user.email + ' already loaded ')
-                #     pass
+                # fp.prepare_albums(user_id=current_user.idApi)
+
+                try:
+                    fp.prepare_albums(user_id=current_user.idApi)
+                except:
+                    # flash('Albums of '+ current_user.email + ' already loaded ')
+                    pass
 
                 current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
                 itemLength = len(current_user_items)
@@ -282,7 +293,8 @@ def menuItem(item):
 @app.route('/ajout/post', methods=['GET', 'POST'])
 @login_required
 def ajouterPost():
-    return render_template('ajouter_post.html')
+    postform = PostForm()
+    return render_template('ajouter_post.html', postform=postform)
 
 
 @app.route('/ajout/todo', methods=['GET', 'POST'])

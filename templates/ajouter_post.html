@@ -1,8 +1,16 @@
 {% extends 'user_index.html' %}
-
 {% block sectionRight %}
+
 {% if current_user.idApi %}
   <h4>vous pouvez ajouter des posts de fromAPI  {{ current_user.idApi }}</h4>
+  {{ postform.hidden_tag() }}
+  {{ postform.title.label(class='form-label') }}
+  {{ postform.title(class='form-control') }}
+  <br>
+  {{ postform.body.label(class='form-label') }}
+  {{ postform.body(class='form-control') }}
+  <br>
+  {{ postform.addBtn }}
 {% else %}
   <h4>vous pouvez ajouter des posts de {{ current_user.id }}</h4>
 {% endif %}

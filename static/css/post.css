@@ -26,7 +26,7 @@ ul#postholder li {
     justify-content: space-between;
 }
 
-li a {
+ul#postholder li a {
     margin: 10px 15px;
     background-color: #e7e7e7;
     text-decoration: none;

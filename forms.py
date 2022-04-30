@@ -30,37 +30,35 @@ class CompanyForm(FlaskForm):
     bs          = StringField('Bs ', validators=[InputRequired()])
 
 class LoginForm(FlaskForm):
-    login = StringField('Login', validators=[InputRequired()])
+    login    = StringField('Login', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
-
-    logBtn = SubmitField('Se connecter')
+    logBtn   = SubmitField('Se connecter')
 
 
 class Charger(FlaskForm):
     charger = SubmitField('Charger')
 
 class PostForm(FlaskForm):
-    title = StringField('Title', validators=[InputRequired()])
-    body  = TextAreaField('Body', validators=[InputRequired()])
+    title  = StringField('Title', validators=[InputRequired()])
+    body   = TextAreaField('Body', validators=[InputRequired()])
     addBtn = SubmitField('Ajouter')
 
 
 class CommentForm(FlaskForm):
-    name = StringField('Name', validators=[InputRequired()])
-    email = EmailField('Email', validators=[InputRequired()])
-    body  = TextAreaField('Body', validators=[InputRequired()])
-    addBtn = SubmitField('Ajouter')
+    name    = StringField('Name', validators=[InputRequired()])
+    email   = EmailField('Email', validators=[InputRequired()])
+    body    = TextAreaField('Body', validators=[InputRequired()])
+    addBtn  = SubmitField('Ajouter')
 
 
 
 class AlbumForm(FlaskForm):
-    title = StringField('Title', validators=[InputRequired()])
-    addBtn = SubmitField('Ajouter')
+    title   = StringField('Title', validators=[InputRequired()])
+    addBtn  = SubmitField('Ajouter')
 
 
 class PhotoForm(FlaskForm):
-    title = StringField('Title', validators=[InputRequired()])
-    url   = URLField('Photo url', validators=[InputRequired()])
+    title        = StringField('Title', validators=[InputRequired()])
+    url          = URLField('Photo url', validators=[InputRequired()])
     thumbnailurl = URLField('Thumbnail url', validators=[InputRequired()])
-    addBtn = SubmitField('Ajouter')
-    
+    addBtn       = SubmitField('Ajouter')
