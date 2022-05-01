@@ -6,13 +6,13 @@ div#subBody {
 
 h4 {
     text-align: center;
-    font-size: x-large;
+    font-size: xx-large;
 }
 
 ul#postholder {
     list-style-type: none;
     width: 100%;
-    height: 50vh;
+    height: 60vh;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
@@ -40,7 +40,7 @@ form {
     justify-content: space-around;
 }
 
-form input {
+form input[name="submit-button"] {
     width: 80px;
     height: 40px;
     font-size: 20px;

@@ -8,6 +8,8 @@ from string import ascii_letters
 from fromApi import FromApi as fp
 from models.users import (User, Address, Company, Post, Album, Photo, app, db)
 from forms import *
+import requests
+from random import choice
 
 # from models.users import app, db
 app = Flask(__name__)
@@ -285,6 +287,27 @@ def menuItem(item):
 
 
     return render_template(f"{item}.html", current_user_items=current_user_items, itemLength=itemLength)
+
+@app.route('/photos')
+def photos():
+    requete = 'https://api.imgflip.com/get_memes'
+    requete1 = 'https://jsonplaceholder.typicode.com/photos'
+    requete2 = 'https://ghibliapi.herokuapp.com/films'
+    photoApi = requests.get(requete1)
+    vl = 'https://picsum.photos/200/300?grayscale'
+    data = photoApi.json()
+    ghibli_api = requests.get(requete2)
+    ghibli_api = ghibli_api.json()
+    liste_img_ghibli = []
+    for io in ghibli_api:
+        liste_img_ghibli.append(io['image'])
+    l_url = liste_img_ghibli
+    l_pho = []
+    for i in data:
+        if i['albumId']==1:
+            i['url']=choice(l_url)
+            l_pho.append(i)
+    return render_template('photos.html', l_pho=l_pho)
 
 
 

@@ -4,6 +4,11 @@ div#subBody {
     align-self: flex-end;
 }
 
+h4 {
+    text-align: center;
+    font-size: xx-large;
+}
+
 ul#postholder {
     list-style-type: none;
     width: 100%;
@@ -11,11 +16,6 @@ ul#postholder {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-}
-
-h4 {
-    text-align: center;
-    font-size: x-large;
 }
 
 ul#postholder li {
@@ -33,6 +33,11 @@ ul#postholder li a {
     color: black;
 }
 
+li a#delete {
+    text-align: end;
+    background-color: white;
+}
+
 form {
     display: flex;
     flex-direction: row-reverse;
@@ -40,7 +45,7 @@ form {
     justify-content: space-around;
 }
 
-form input {
+form input[name="submit-button"] {
     width: 80px;
     height: 40px;
     font-size: 20px;

@@ -1,23 +1,23 @@
 /*  ACCEIL PAGE */
-/* from marieme */
-html{
 
-}
+
+/* from marieme */
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 99.2vw;
-  height: 100%;
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 99.2vw;
+    height: 100%;
+    overflow: hidden;
 }
 
-.pageBody{
+.pageBody {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
 }
+
 
 /* Index User */
 
@@ -28,26 +28,20 @@ body {
     width: 100%;
 }
 
-#userHeader {
-
-}
-
-
 #articles {
-  background-color: ;
-  margin-top: 20px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  /* justify-content: flex-start; */
-  justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: flex-start; */
+    justify-content: space-between;
 }
 
 #sectionLeft {
-  border: 2px solid green;
+    border-right: 2px solid #000000;
     width: 500px;
-    height: 700px ;
+    height: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -70,27 +64,28 @@ body {
     box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25);
 }
 
-div.heading{
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  width: 70%;
-  align-self: center;
+div.heading button {
+    border: 2px solid gray;
+    background-color: #e7e7e7;
+    font-size: 20px;
+    box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25)
 }
 
-
-button a{
-  text-decoration: none;
-  color: black;
+div.heading {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    width: 95%;
+    align-self: center;
 }
 
-button.logout{
-  background-color: darkgrey;
+button a {
+    text-decoration: none;
+    color: black;
 }
 
-button.home{
-  background-color: darkgrey;
-
+button.logout {
+    background-color: #e7e7e7;
 }
 
 #sectionRight{
@@ -101,5 +96,5 @@ button.home{
   align-items: center;
   justify-content: center;
   /* background-color: red; */
-  border: 2px solid;
+  /* border: 2px solid; */
 }

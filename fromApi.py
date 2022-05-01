@@ -1,5 +1,6 @@
 import requests
 from random import randint
+from random import choice
 from models.users import *
 
 # offline work
@@ -7,6 +8,8 @@ from json import load
 
 class FromApi:
     api_url  = 'https://jsonplaceholder.typicode.com/'
+    api_image = 'https://ghibliapi.herokuapp.com/films'
+    requete = 'https://api.imgflip.com/get_memes'
     # api_url  = '../users.json' # offline work
     # api_url  = '../posts.json' # offline work
 
@@ -21,6 +24,16 @@ class FromApi:
         except:
             print('Verifiez la connexion')
 
+    @classmethod
+    def getApiUrlPhoto(cls):
+        try:
+            api_image = requests.get(cls.requete)
+            api_image = api_image.json()
+            api_image = api_image['data']
+            api_image = api_image['memes']
+            return choice(api_image)['url']
+        except:
+            print("Vérifiez la connexion")
 
     # # offline work
     # @classmethod
@@ -37,27 +50,27 @@ class FromApi:
             photo_instance    = Photo(
                 albumId       = photo.get('albumId'),
                 title         = photo.get('title'),
-                url           = photo.get('url'),
-                thumbnailurl = photo.get('thumbnailUrl')
+                url           = cls.getApiUrlPhoto(),
+                thumbnail_url = photo.get('thumbnailUrl')
             )
 
             db.session.add(photo_instance)
 
-
-    @classmethod
-    def prepare_albums(cls, user_id):
-        endpoint = f'users/{user_id}/albums'
-        albums = cls.api_to_json(endpoint)
-        for album in albums:
-            album_instance = Album(
-                userId = album.get('userId'),
-                idApi  = album.get('id'),
-                title  = album.get('title')
-            )
-            # print(album_instance)
-            db.session.add(album_instance)
-            album_id = album.get('id')
-            cls.prepare_photos(album_id)
+# verifier
+    # @classmethod
+    # def prepare_albums(cls, user_id):
+    #     endpoint = f'users/{user_id}/albums'
+    #     albums = cls.api_to_json(endpoint)
+    #     for album in albums:
+    #         album_instance = Album(
+    #             userId = album.get('userId'),
+    #             idApi  = album.get('id'),
+    #             title  = album.get('title')
+    #         )
+    #         # print(album_instance)
+    #         db.session.add(album_instance)
+    #         album_id = album.get('id')
+    #         cls.prepare_photos(album_id)
 
         try:
             db.session.commit()

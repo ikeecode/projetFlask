@@ -1,17 +1,12 @@
 {% extends 'user_index.html' %}
 
 {% block title %}
-  Todos de {{ current_user.name }}
+  Photo de {{ current_user.name }}
 {% endblock title %}
 
 {% block sectionRight %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/album.css') }}">
 <div id="subBody">
-  <form class="" action="" method="post">
-    <input type="submit" name="submit-button" value="charger">
-    <input type="submit" name="submit-button" value="ajouter">
-  </form>
-  <br><br>
   {% if current_user_items %}
     <h4>les Albums de {{ current_user.name }} </h4>
   <ul id="postholder">
@@ -24,5 +19,10 @@
   {% else %}
       <h4>There is no Albums in the Database</h4>
   {% endif %}
+  <form class="" action="" method="post">
+    <input type="submit" name="submit-button" value="charger">
+    <input type="submit" name="submit-button" value="ajouter">
+  </form>
+  <br><br>
 </div>
 {% endblock sectionRight %}
