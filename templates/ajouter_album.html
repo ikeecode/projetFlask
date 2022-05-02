@@ -4,7 +4,21 @@
 <button type="button" class="btn retour btn-lg"><a href="{{ url_for('chargementUser') }}">Retour</a></button>
 {% if current_user.idApi %}
   <h4>vous pouvez ajouter des albums de fromAPI  {{ current_user.idApi }}</h4>
+  <form class="" action="" method="post">
+      {{ albumform.hidden_tag() }}
+      {{ albumform.title.label(class='form-label') }}
+      {{ albumform.title(class='form-control') }}
+      <br>
+      {{ albumform.addBtn}}
+  </form>
 {% else %}
   <h4>vous pouvez ajouter des albums de {{ current_user.id }}</h4>
+  <form class="" action="" method="post">
+      {{ albumform.hidden_tag() }}
+      {{ albumform.title.label(class='form-label') }}
+      {{ albumform.title(class='form-control') }}
+      <br>
+      {{ albumform.addBtn}}
+  </form>
 {% endif %}
 {% endblock sectionRight %}

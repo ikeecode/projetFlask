@@ -62,3 +62,8 @@ class PhotoForm(FlaskForm):
     url          = URLField('Photo url', validators=[InputRequired()])
     thumbnailurl = URLField('Thumbnail url', validators=[InputRequired()])
     addBtn       = SubmitField('Ajouter')
+
+class TodoForm(FlaskForm):
+    title  = StringField('Title', validators=[InputRequired()])
+    addBtn = SubmitField('Ajouter')
+    # completed = BooleanField('Etat')

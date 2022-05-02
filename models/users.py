@@ -73,6 +73,7 @@ class Todo(db.Model):
     id        = db.Column(db.Integer, primary_key=True, nullable=False)
     title     = db.Column(db.String(200), nullable=False, unique=True)
     completed = db.Column(db.Boolean, nullable=False)
+    # status    = db.Column(db.Enum())
 
 
     def __str__(self):

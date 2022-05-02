@@ -3,7 +3,21 @@
 {% block sectionRight %}
 {% if current_user.idApi %}
   <h4>vous pouvez ajouter des todos de fromAPI  {{ current_user.idApi }}</h4>
+  <form class="" action="" method="post">
+    {{ todoform.hidden_tag() }}
+    {{ todoform.title.label(class="form-label") }}
+    {{ todoform.title(class="form-control") }}
+    <br>
+      {{ todoform.addBtn }}
+  </form>
 {% else %}
   <h4>vous pouvez ajouter des todos de {{ current_user.id }}</h4>
+  <form class="" action="" method="post">
+    {{ todoform.hidden_tag() }}
+    {{ todoform.title.label(class="form-label") }}
+    {{ todoform.title(class="form-control") }}
+    <br>
+      {{ todoform.addBtn }}
+  </form>
 {% endif %}
 {% endblock sectionRight %}

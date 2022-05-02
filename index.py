@@ -6,7 +6,7 @@ from folium import Map, Marker
 from random import randint
 from string import ascii_letters
 from fromApi import FromApi as fp
-from models.users import (User, Address, Company, Post, Album, Photo, app, db)
+from models.users import (User, Address, Company, Post, Album, Photo, Todo, app, db)
 from forms import *
 import requests
 from random import choice
@@ -123,7 +123,7 @@ def logIn():
                 password = randomPassword()
                 flash('Votre mot de passe est '+ password)
                 user.password = password
-                print(password)
+                # print(password)
                 # db.session.add(user)
                 db.session.commit()
             elif user.password != form.password.data:
@@ -271,6 +271,7 @@ def menuItem(item):
                     fp.prepare_albums(user_id=current_user.idApi)
                 except:
                     # flash('Albums of '+ current_user.email + ' already loaded ')
+                    print('there is an error ')
                     pass
 
                 current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
@@ -288,26 +289,28 @@ def menuItem(item):
 
     return render_template(f"{item}.html", current_user_items=current_user_items, itemLength=itemLength)
 
-@app.route('/photos')
-def photos():
-    requete = 'https://api.imgflip.com/get_memes'
-    requete1 = 'https://jsonplaceholder.typicode.com/photos'
-    requete2 = 'https://ghibliapi.herokuapp.com/films'
-    photoApi = requests.get(requete1)
-    vl = 'https://picsum.photos/200/300?grayscale'
-    data = photoApi.json()
-    ghibli_api = requests.get(requete2)
-    ghibli_api = ghibli_api.json()
-    liste_img_ghibli = []
-    for io in ghibli_api:
-        liste_img_ghibli.append(io['image'])
-    l_url = liste_img_ghibli
-    l_pho = []
-    for i in data:
-        if i['albumId']==1:
-            i['url']=choice(l_url)
-            l_pho.append(i)
-    return render_template('photos.html', l_pho=l_pho)
+
+
+# @app.route('/photos')
+# def photos():
+#     requete = 'https://api.imgflip.com/get_memes'
+#     requete1 = 'https://jsonplaceholder.typicode.com/photos'
+#     requete2 = 'https://ghibliapi.herokuapp.com/films'
+#     photoApi = requests.get(requete1)
+#     vl = 'https://picsum.photos/200/300?grayscale'
+#     data = photoApi.json()
+#     ghibli_api = requests.get(requete2)
+#     ghibli_api = ghibli_api.json()
+#     liste_img_ghibli = []
+#     for io in ghibli_api:
+#         liste_img_ghibli.append(io['image'])
+#     l_url = liste_img_ghibli
+#     l_pho = []
+#     for i in data:
+#         if i['albumId']==1:
+#             i['url']=choice(l_url)
+#             l_pho.append(i)
+#     return render_template('photos.html', l_pho=l_pho)
 
 
 
@@ -317,19 +320,62 @@ def photos():
 @login_required
 def ajouterPost():
     postform = PostForm()
+    if postform.validate_on_submit():
+        post_instance = Post(
+            userId = current_user.idApi if current_user.idApi else current_user.id,
+            idApi  = None,
+            fromApi= False,
+            title  = postform.title.data,
+            body   = postform.body.data
+        )
+        db.session.add(post_instance)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        postform = PostForm(formdata=None)
     return render_template('ajouter_post.html', postform=postform)
 
 
 @app.route('/ajout/todo', methods=['GET', 'POST'])
 @login_required
 def ajouterTodo():
-    return render_template('ajouter_todo.html')
+    todoform = TodoForm()
+    if todoform.validate_on_submit():
+        todo_instance = Todo(
+            userId  = current_user.idApi if current_user.idApi else current_user.id,
+            title   = todoform.title.data,
+            completed = False
+        )
+
+        db.session.add(todo_instance)
+
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+        todoform = TodoForm(formdata=None)
+    return render_template('ajouter_todo.html', todoform=todoform)
 
 
 @app.route('/ajout/album', methods=['GET', 'POST'])
 @login_required
 def ajouterAlbum():
-    return render_template('ajouter_album.html')
+    albumform = AlbumForm()
+    if albumform.validate_on_submit():
+        album_instance = Album(
+            userId = current_user.idApi if current_user.idApi else current_user.id,
+            idApi  = None,
+            title  = albumform.title.data
+        )
+        db.session.add(album_instance)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        albumform = AlbumForm(formdata=None)
+    return render_template('ajouter_album.html', albumform=albumform)
 
 @app.route('/ajout/user', methods=['GET', 'POST'])
 def ajouter_user():
@@ -399,10 +445,6 @@ def ajouter_user():
                             formAddress=formAddress,
                             formCompany=formCompany,
                             )
-
-
-
-
 
 
 if __name__=='__main__':

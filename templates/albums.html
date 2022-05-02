@@ -11,18 +11,23 @@
     <h4>les Albums de {{ current_user.name }} </h4>
   <ul id="postholder">
     {% for i in range(itemLength) %}
+      {% if current_user_items[i].idApi %}
       <li>
         <a href="{{ url_for('view_photos', album_id= current_user_items[i].idApi ) }}">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
       </li>
+      {% else %}
+      <li>
+        <a href="{{ url_for('view_photos', album_id= current_user_items[i].id ) }}">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
+      </li>
+      {% endif %}
     {% endfor %}
   </ul>
   {% else %}
       <h4>There is no Albums in the Database</h4>
   {% endif %}
-  <form class="" action="" method="post">
+  <form class="" action="" method="post">  <form class="" action="" method="post">
     <input type="submit" name="submit-button" value="charger">
     <input type="submit" name="submit-button" value="ajouter">
   </form>
-  <br><br>
 </div>
 {% endblock sectionRight %}

@@ -51,31 +51,32 @@ class FromApi:
                 albumId       = photo.get('albumId'),
                 title         = photo.get('title'),
                 url           = cls.getApiUrlPhoto(),
-                thumbnail_url = photo.get('thumbnailUrl')
+                thumbnailurl = photo.get('thumbnailUrl')
             )
 
             db.session.add(photo_instance)
 
-# verifier
-    # @classmethod
-    # def prepare_albums(cls, user_id):
-    #     endpoint = f'users/{user_id}/albums'
-    #     albums = cls.api_to_json(endpoint)
-    #     for album in albums:
-    #         album_instance = Album(
-    #             userId = album.get('userId'),
-    #             idApi  = album.get('id'),
-    #             title  = album.get('title')
-    #         )
-    #         # print(album_instance)
-    #         db.session.add(album_instance)
-    #         album_id = album.get('id')
-    #         cls.prepare_photos(album_id)
+    @classmethod
+    def prepare_albums(cls, user_id):
+        endpoint = f'users/{user_id}/albums'
+        albums = cls.api_to_json(endpoint)
+        for album in albums:
+            album_instance = Album(
+                userId = album.get('userId'),
+                idApi  = album.get('id'),
+                title  = album.get('title')
+            )
+            # print(album_instance)
+            db.session.add(album_instance)
+            album_id = album.get('id')
+            cls.prepare_photos(album_id)
 
         try:
             db.session.commit()
+            print('ok')
         except:
             db.session.rollback()
+            print('there is problem')
 
 
 
