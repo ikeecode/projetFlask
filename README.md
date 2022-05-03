@@ -28,6 +28,39 @@
 
 ```
 
+
+#### Installation du SGBD [postgresql](https://www.postgresql.org/download/linux/ubuntu/)
+
+```bash
+        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        sudo apt-get update
+        sudo apt-get -y install postgresql
+
+```
+
+> Renseigner votre nom d'utilisateur ubuntu pour votre utilisateur postgres
+> Choisir le mode super utilisateur aussi pour pouvoir creer la base de donnee grace à votre user
+
+#### Creation de votre utilisateur sur postgres
+```bash
+        sudo -u postgres createuser --interactive
+
+```
+
+#### Creation de la base de donnee ayant le meme nom que votre utilisateur
+```bash
+        sudo -u postgres createdb [votre nom d'utilisateur]
+
+```
+
+
+> Assurez vous d'avoir le fichier setup.py
+#### Creation de votre base de donnee et des tables pour le projet
+```bash
+        python3 setup.py
+
+```
 #### Executez le fichier index avec la commande suivante pour lancer l'application
 ```bash
         python3 index.py

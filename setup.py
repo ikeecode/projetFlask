@@ -33,6 +33,8 @@ print("Database created successfully........")
 #Closing the connection
 conn.close()
 
+
+
 # sudo -u postgres psql postgres
 #
 # ALTER USER username CREATEDB; donne le droit a un user de creeer une base
