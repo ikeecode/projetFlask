@@ -313,8 +313,32 @@ def menuItem(item):
 #     return render_template('photos.html', l_pho=l_pho)
 
 
-
-
+# les modifications
+@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def updatePost(post_id):
+    postform = PostForm()
+    post_to_update = Post.query.get_or_404(post_id)
+    postform.title.data = post_to_update.title
+    postform.body.data  = post_to_update.body
+    if request.method == 'POST':
+        post_to_update.title = request.form.get('title')
+        post_to_update.body = request.form.get('body')
+        try:
+            db.session.commit()
+            flash('Votre Post a été mis à jour !')
+            return redirect(url_for('menuItem', item='post'))
+        except:
+            flash('Error! Looks like there is an error ')
+            return render_template('update_post.html',
+                            postform=postform,
+                            post_to_update=post_to_update
+                            )
+    else:
+        return render_template('update_post.html',
+                        postform=postform,
+                        post_to_update=post_to_update
+                        )
 # les routes des formulaires d'ajout
 @app.route('/ajout/post', methods=['GET', 'POST'])
 @login_required

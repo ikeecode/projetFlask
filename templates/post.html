@@ -4,8 +4,15 @@
 {% endblock title %}
 {% block sectionRight %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
 <div id="subBody">
-    <br><br> {% if current_user_items %}
+  {% if current_user_items %}
     <h4>les posts de {{ current_user.name }} </h4>
 
     <ul id="postholder">
@@ -14,7 +21,10 @@
             <!-- <a id="" href="#">{{ i + 1 }}</a> -->
             <a id="title" href="#">Title : {{ current_user_items[i].title | capitalize }}</a>
             <a id="body" href="#">{{ current_user_items[i].body | capitalize }}</a>
-            <a id="delete" href="#"><button>Supprimer</button></a>
+            <div class="submenu">
+              <a id="delete" href="#"><button>Supprimer</button></a>
+              <a href="{{ url_for('updatePost', post_id=current_user_items[i].id) }}"><button type="button" name="button">Update</button></a>
+            </div>
         </li>
         {% endfor %}
     </ul>
