@@ -10,6 +10,13 @@
     <br>
       {{ todoform.addBtn }}
   </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('menuItem', item='todos') }}"><button type="button" name="button">Retour</button></a>
 {% else %}
   <h4>vous pouvez ajouter des todos de {{ current_user.id }}</h4>
   <form class="" action="" method="post">
@@ -19,5 +26,12 @@
     <br>
       {{ todoform.addBtn }}
   </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('menuItem', item='todos') }}"><button type="button" name="button">Retour</button></a>
 {% endif %}
 {% endblock sectionRight %}

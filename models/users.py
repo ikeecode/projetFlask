@@ -56,6 +56,7 @@ class User(UserMixin, db.Model):
     website   = db.Column(db.String(200), nullable=False)
     companyId = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     password  = db.Column(db.String(200), nullable=True)
+    archive   = db.Column(db.Boolean, nullable=True, default=False)
 
     todos     = db.relationship('Todo', backref='users', cascade='all, delete-orphan')
     albums    = db.relationship('Album', backref='users', cascade='all, delete-orphan')
@@ -73,6 +74,8 @@ class Todo(db.Model):
     id        = db.Column(db.Integer, primary_key=True, nullable=False)
     title     = db.Column(db.String(200), nullable=False, unique=True)
     completed = db.Column(db.Boolean, nullable=False)
+    archive   = db.Column(db.Boolean, nullable=True, default=False)
+
     # status    = db.Column(db.Enum())
 
 
@@ -85,6 +88,8 @@ class Album(db.Model):
     idApi     = db.Column(db.Integer, nullable=True, unique=True)
     id        = db.Column(db.Integer, primary_key=True, nullable=False)
     title     = db.Column(db.String(200), nullable=False, unique=True)
+    archive   = db.Column(db.Boolean, nullable=True, default=False)
+
     photos    = db.relationship('Photo', backref='albums', cascade='all, delete-orphan')
 
     def __str__(self):
@@ -100,6 +105,8 @@ class Photo(db.Model):
     title         = db.Column(db.String(200), nullable=False)
     url           = db.Column(db.String(200), nullable=False)
     thumbnailurl = db.Column(db.String(200), nullable=False)
+    archive   = db.Column(db.Boolean, nullable=True, default=False)
+
 
     def __str__(self):
         return f"Photo(albumId:{self.albumId}, id:{self.id}, title:{self.title}, url:{self.url})"
@@ -113,6 +120,8 @@ class Post(db.Model):
     fromApi   = db.Column(db.Boolean, nullable=True, default=False)
     title     = db.Column(db.String(200), nullable=False)
     body      = db.Column(db.Text, nullable=False)
+    archive   = db.Column(db.Boolean, nullable=True, default=False)
+
     comments  = db.relationship('Comment', backref='posts', cascade='all, delete-orphan')
 
 
@@ -122,11 +131,13 @@ class Post(db.Model):
 
 class Comment(db.Model):
     __tablename__ ='comments'
-    postId = db.Column(db.Integer, db.ForeignKey('posts.idApi'), nullable=False)
-    id     = db.Column(db.Integer, primary_key=True, nullable=False)
-    name   = db.Column(db.String(200), nullable=False)
-    email  = db.Column(db.String(200), nullable=False)
-    body   = db.Column(db.Text, nullable=False)
+    postId   = db.Column(db.Integer, db.ForeignKey('posts.idApi'), nullable=False)
+    id       = db.Column(db.Integer, primary_key=True, nullable=False)
+    name     = db.Column(db.String(200), nullable=False)
+    email    = db.Column(db.String(200), nullable=False)
+    body     = db.Column(db.Text, nullable=False)
+    archive  = db.Column(db.Boolean, nullable=True, default=False)
+
 
     def __str__(self):
         return f"Comment(postId:{self.postId}, id:{self.id}, name:{self.name}, email:{self.email})"

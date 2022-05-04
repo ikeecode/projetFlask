@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, abo
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
 from folium import Map, Marker
+from flask_migrate import Migrate
 # from flask_googlemaps import GoogleMaps, Map
 from random import randint
 from string import ascii_letters
@@ -22,7 +23,7 @@ db.init_app(app)
 
 Bootstrap(app)
 # GoogleMaps(app)
-
+migrate = Migrate(app, db)
 
 # login stuff
 login_manager = LoginManager()
@@ -199,6 +200,8 @@ def menuItem(item):
     elif item == 'post':
         # chargerPost = Charger()
         current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().posts
+        current_user_items  = [item for item in current_user_items if item.archive==False]
+
         itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
@@ -210,6 +213,7 @@ def menuItem(item):
                     pass
                 # current_user_items  = Post.query.filter_by(userId=current_user.idApi).all()
                 current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().posts
+                current_user_items  = [item for item in current_user_items if item.archive==False]
                 itemLength = len(current_user_items)
 
                 return render_template(
@@ -313,6 +317,55 @@ def menuItem(item):
 #     return render_template('photos.html', l_pho=l_pho)
 
 
+# affichage des archives
+@app.route('/archive/post')
+@login_required
+def postArchive():
+    current_user_items_from_archive  = User.query.filter_by(idApi=current_user.idApi).first().posts
+    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive==True]
+    itemLength = len(current_user_items_from_archive)
+    return render_template(
+        "post.html",
+        current_user_items_from_archive=current_user_items_from_archive,
+        itemLength=itemLength
+    )
+
+
+# les suppressions ou archivage
+@app.route('/delete/post/<int:post_id>')
+@login_required
+def deletePost(post_id):
+    post_to_delete = Post.query.get_or_404(post_id)
+    # print(post_to_delete.archive)
+    if post_to_delete.archive==None or post_to_delete.archive==False:
+        post_to_delete.archive = True
+        try:
+            db.session.commit()
+            flash('Votre post a été supprimé !')
+            return redirect(url_for('menuItem', item='post'))
+        except:
+            return redirect(url_for('menuItem', item='post'))
+    else:
+        post_to_delete.archive = False
+        db.session.commit()
+
+        return redirect(url_for('menuItem', item='post'))
+
+
+# afficher les commentaires d'un post
+
+@app.route('/post/<int:post_id>/comments')
+@login_required
+def afficheComments(post_id):
+    current_user_items = Post.query.filter_by(idApi=post_id).first().comments
+    itemLength = len(current_user_items)
+
+    return render_template('display_comments.html',
+                            current_user_items=current_user_items,
+                            itemLength=itemLength
+                            )
+
+
 # les modifications
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 @login_required
@@ -339,6 +392,8 @@ def updatePost(post_id):
                         postform=postform,
                         post_to_update=post_to_update
                         )
+
+
 # les routes des formulaires d'ajout
 @app.route('/ajout/post', methods=['GET', 'POST'])
 @login_required
@@ -359,6 +414,7 @@ def ajouterPost():
             db.session.rollback()
         postform = PostForm(formdata=None)
     return render_template('ajouter_post.html', postform=postform)
+
 
 
 @app.route('/ajout/todo', methods=['GET', 'POST'])

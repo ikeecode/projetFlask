@@ -1,7 +1,6 @@
 {% extends 'user_index.html' %}
 
 {% block sectionRight %}
-<button type="button" class="btn retour btn-lg"><a href="{{ url_for('chargementUser') }}">Retour</a></button>
 {% if current_user.idApi %}
   <h4>vous pouvez ajouter des albums de fromAPI  {{ current_user.idApi }}</h4>
   <form class="" action="" method="post">
@@ -11,6 +10,14 @@
       <br>
       {{ albumform.addBtn}}
   </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('menuItem', item='albums') }}"><button type="button" name="button">Retour</button></a>
+
 {% else %}
   <h4>vous pouvez ajouter des albums de {{ current_user.id }}</h4>
   <form class="" action="" method="post">
@@ -20,5 +27,12 @@
       <br>
       {{ albumform.addBtn}}
   </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('menuItem', item='albums') }}"><button type="button" name="button">Retour</button></a>
 {% endif %}
 {% endblock sectionRight %}

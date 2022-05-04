@@ -59,3 +59,31 @@ div.submenu{
   justify-content: space-between;
   flex-wrap: nowrap;
 }
+
+
+/* pour les archives  */
+
+
+ul#postholder_second {
+    list-style-type: none;
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+ul#postholder_second li {
+    border: 2px solid #000000;
+    margin: 15px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+ul#postholder_second li a {
+    margin: 10px 15px;
+    background-color: #e7e7e7;
+    text-decoration: none;
+    color: black;
+}

@@ -14,6 +14,14 @@
     {{ postform.addBtn }}
   </form>
 
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('menuItem', item='post') }}"><button type="button" name="button">Retour</button></a>
+
 {% else %}
   <h4>vous pouvez ajouter des posts de {{ current_user.id }}</h4>
   <form class="" action="" method="post">
@@ -26,5 +34,12 @@
     <br>
     {{ postform.addBtn }}
   </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('menuItem', item='post') }}"><button type="button" name="button">Retour</button></a>
 {% endif %}
 {% endblock sectionRight %}
