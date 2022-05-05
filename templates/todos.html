@@ -1,6 +1,14 @@
 {% extends 'user_index.html' %} {% block title %} Todos de {{ current_user.name }} {% endblock title %} {% block sectionRight %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/todos.css') }}">
-<div id="subBody"><br>
+<div id="subBody">
+  {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  {% endfor %}
+    <br>
+    <a href="{{ url_for('todoArchive') }}"><button type="button" name="button">Archives</button></a>
     <br><br> {% if current_user_items %}
     <h4>les Todos de {{ current_user.name }} </h4>
     <ul id="postholder">
@@ -11,19 +19,36 @@
             <option value="true">À faire</option>
             <option value="false">En cours</option>
             <option value="true">Terminé</option>
-          </select>
-            <a id="title" href="#">{{ current_user_items[i].title }}</a>
-            <a id="edit" href="#"> <img src="{{url_for('static', filename='img/edit.svg')}}" alt="phototProfil"></a>
-            <a id="trash" href="#"> <img src="{{url_for('static', filename='img/trash.svg')}}" alt="phototProfil"></a>
+            </select>
+            <a id="title" href="{{ url_for('updateTodo', todo_id=current_user_items[i].id) }}">{{ current_user_items[i].title }}</a>
+            <a id="edit" href="{{ url_for('updateTodo', todo_id=current_user_items[i].id) }}"> <img src="{{url_for('static', filename='img/edit.svg')}}" alt="phototProfil"></a>
+            <a id="trash" href="{{ url_for('deleteTodo', todo_id=current_user_items[i].id) }}"> <img src="{{url_for('static', filename='img/trash.svg')}}" alt="phototProfil"></a>
         </li>
         {% endfor %}
     </ul>
-    {% else %}
-    <h4>There is no posts in the Database</h4>
-    {% endif %}
     <form class="" action="" method="post">
         <input type="submit" name="submit-button" value="charger">
         <input type="submit" name="submit-button" value="ajouter">
     </form>
+    {% else %}
+    <h4>Ici sont les archives des todos </h4>
+    {% if current_user_items_from_archive %}
+    <ul id="postholder">
+        {% for i in range(itemLength) %}
+        <li>
+            <select id="etatNote" name="etat">
+            <option value="etatTodo">ÉTAT</option>
+            <option value="true">À faire</option>
+            <option value="false">En cours</option>
+            <option value="true">Terminé</option>
+            </select>
+            <a id="title" href="url_for('updateTodo', todo_id=current_user_items_from_archive[i].id) ">{{ current_user_items_from_archive[i].title }}</a>
+            <a id="edit" href="url_for('updateTodo', todo_id=current_user_items_from_archive[i].id) "> <img src="{{url_for('static', filename='img/edit.svg')}}" alt="phototProfil"></a>
+            <a id="trash" href="{{ url_for('deleteTodo', todo_id=current_user_items_from_archive[i].id) }}"> <img alt="reprendre" src="{{url_for('static', filename='img/trash.svg')}}" alt="phototProfil"></a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock sectionRight %}

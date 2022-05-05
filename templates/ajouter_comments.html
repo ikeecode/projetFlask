@@ -1,0 +1,49 @@
+{% extends 'user_index.html' %}
+
+{% block sectionRight %}
+{% if current_user.idApi %}
+  <h4>vous pouvez ajouter des commentaires de fromAPI  {{ current_user.idApi }}</h4>
+  <form class="" action="" method="post">
+    {{ commentform.hidden_tag() }}
+    {{ commentform.name.label(class="form-label") }}
+    {{ commentform.name(class="form-control") }}
+    <br>
+    {{ commentform.email.label(class="form-label") }}
+    {{ commentform.email(class="form-control") }}
+    <br>
+    {{ commentform.body.label(class="form-label") }}
+    {{ commentform.body(class="form-control") }}
+    <br>
+      {{ commentform.addBtn }}
+  </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('afficheComments', post_id=post_id) }}"><button type="button" name="button">Retour</button></a>
+{% else %}
+  <h4>vous pouvez ajouter des commentaires de {{ current_user.id }}</h4>
+  <form class="" action="" method="post">
+    {{ commentform.hidden_tag() }}
+    {{ commentform.name.label(class="form-label") }}
+    {{ commentform.name(class="form-control") }}
+    <br>
+    {{ commentform.email.label(class="form-label") }}
+    {{ commentform.email(class="form-control") }}
+    <br>
+    {{ commentform.body.label(class="form-label") }}
+    {{ commentform.body(class="form-control") }}
+    <br>
+      {{ commentform.addBtn }}
+  </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <a href="{{ url_for('afficheComments', post_id=post_id) }}"><button type="button" name="button">Retour</button></a>
+{% endif %}
+{% endblock sectionRight %}

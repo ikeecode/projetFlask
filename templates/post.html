@@ -11,6 +11,7 @@
        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
+
 <div id="subBody">
   <a href="{{ url_for('postArchive')}}"><button type="button" name="button">Voir les archives</button></a>
   {% if current_user_items %}
@@ -23,9 +24,9 @@
             <a id="title" href="#">Title : {{ current_user_items[i].title | capitalize }}</a>
             <a id="body" href="#">{{ current_user_items[i].body | capitalize }}</a>
             <div class="submenu">
-              <a id="delete" href="{{ url_for('deletePost', post_id=current_user_items[i].idApi) }}"><button>Supprimer</button></a>
-              <a href="{{ url_for('afficheComments', post_id=current_user_items[i].idApi) }}"><button type="button" name="button">Commentaires</button></a>
-              <a href="{{ url_for('updatePost', post_id=current_user_items[i].idApi) }}"><button type="button" name="button">Update</button></a>
+              <a id="delete" href="{{ url_for('deletePost', post_id=current_user_items[i].id) }}"><button>Supprimer</button></a>
+              <a href="{{ url_for('afficheComments', post_id=current_user_items[i].id) }}"><button type="button" name="button">Commentaires</button></a>
+              <a href="{{ url_for('updatePost', post_id=current_user_items[i].id) }}"><button type="button" name="button">Update</button></a>
             </div>
         </li>
         {% endfor %}

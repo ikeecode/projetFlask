@@ -1,0 +1,25 @@
+{% extends 'user_index.html' %}
+{% block sectionRight %}
+
+{% if current_user.idApi %}
+  <h4>Update page de fromAPI  {{ current_user.idApi }}</h4>
+  <form class="" action="" method="post">
+    {{ albumform.hidden_tag() }}
+
+    {{ albumform.title.label(class='form-label') }}
+    {{ albumform.title(class='form-control') }}
+    <br>
+    {{ albumform.addBtn }}
+  </form>
+
+{% else %}
+  <h4>Update page de {{ current_user.id }}</h4>
+  <form class="" action="" method="post">
+    {{ albumform.hidden_tag() }}
+    {{ albumform.title.label(class='form-label') }}
+    {{ albumform.title(class='form-control') }}
+    <br>
+    {{ albumform.addBtn }}
+  </form>
+{% endif %}
+{% endblock sectionRight %}

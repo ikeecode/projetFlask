@@ -14,7 +14,7 @@
 <div id="subBody">
   <a href="{{ url_for('postArchive')}}"><button type="button" name="button">Voir les archives</button></a>
   {% if current_user_items %}
-    <h4>les commentaires du post {{current_user_items[0].postId}} </h4>
+    <h4>les commentaires du post {{ post_id }}</h4>
 
     <ul id="postholder">
         {% for i in range(itemLength) %}
@@ -24,7 +24,7 @@
             <a id="title" href="#">Email : {{ current_user_items[i].email | capitalize }}</a>
             <a id="body" href="#">{{ current_user_items[i].body | capitalize }}</a>
             <div class="submenu">
-              <a id="delete" href="{{ }}"><button>Supprimer</button></a>
+              <a id="delete" href="{{ url_for('deleteComment', comment_id=current_user_items[i].id) }}"><button>Supprimer</button></a>
               <a href=""><button type="button" name="button">Update</button></a>
             </div>
         </li>
@@ -49,9 +49,10 @@
     </ul>
     {% endif %}
   {% endif %}
-    <form class="" action="" method="post">
+    <!-- <form class="" action="" method="post">
         <input type="submit" name="submit-button" value="charger">
         <input type="submit" name="submit-button" value="ajouter">
-    </form>
+    </form> -->
+    <a href="{{ url_for('ajouterComment', post_id=post_id) }}"><button type="button" name="button">Ajouter</button></a>
 </div>
 {% endblock sectionRight %}

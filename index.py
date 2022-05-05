@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from random import randint
 from string import ascii_letters
 from fromApi import FromApi as fp
-from models.users import (User, Address, Company, Post, Album, Photo, Todo, app, db)
+from models.users import (User, Address, Company, Post, Album, Photo, Todo, Comment, app, db)
 from forms import *
 import requests
 from random import choice
@@ -235,6 +235,7 @@ def menuItem(item):
 
     elif item == 'todos':
         current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().todos #this change
+        current_user_items  = [item for item in current_user_items if not item.archive]
         itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
@@ -330,44 +331,140 @@ def postArchive():
         itemLength=itemLength
     )
 
+@app.route('/archive/todos', methods=['GET', 'POST'])
+@login_required
+def todoArchive():
+        current_user_items_from_archive  = User.query.filter_by(idApi=current_user.idApi).first().todos
+        current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive==True]
+        itemLength = len(current_user_items_from_archive)
+        return render_template(
+            "todos.html",
+            current_user_items_from_archive=current_user_items_from_archive,
+            itemLength=itemLength
+        )
 
 # les suppressions ou archivage
+@app.route('/delete/todo/<int:todo_id>')
+@login_required
+def deleteTodo(todo_id):
+    todo_to_delete = Todo.query.get_or_404(todo_id)
+    if not todo_to_delete.archive:
+        todo_to_delete.archive = True
+        db.session.commit()
+        flash('Votre todo est supprimé !')
+        return redirect(url_for('menuItem', item='todos'))
+    else:
+        todo_to_delete.archive = False
+        db.session.commit()
+        return redirect(url_for('menuItem', item='todos'))
+
+
+
 @app.route('/delete/post/<int:post_id>')
 @login_required
 def deletePost(post_id):
     post_to_delete = Post.query.get_or_404(post_id)
     # print(post_to_delete.archive)
-    if post_to_delete.archive==None or post_to_delete.archive==False:
+    if not post_to_delete.archive:
         post_to_delete.archive = True
         try:
             db.session.commit()
             flash('Votre post a été supprimé !')
+            # print('commentaire supprimé')
+            # print(post_to_delete.archive)
+
             return redirect(url_for('menuItem', item='post'))
         except:
+            print('a problem occured')
             return redirect(url_for('menuItem', item='post'))
-    else:
+    elif post_to_delete.archive == True:
         post_to_delete.archive = False
         db.session.commit()
-
         return redirect(url_for('menuItem', item='post'))
+    else:
+        pass
+
+@app.route('/delete/comment/<int:comment_id>')
+@login_required
+def deleteComment(comment_id):
+    comment_to_delete = Comment.query.get_or_404(comment_id)
+    if not comment_to_delete.archive:
+        comment_to_delete.archive = True
+        try:
+            db.session.commit()
+            flash('Le commentaire est supprimé !')
+            return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
+        except:
+            flash('Une erreur a eu lieu, veuillez reessayer ! ')
+            return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
+    else:
+        comment_to_delete.archive = False
+        db.session.commit()
+        return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
 
 
 # afficher les commentaires d'un post
-
 @app.route('/post/<int:post_id>/comments')
 @login_required
 def afficheComments(post_id):
-    current_user_items = Post.query.filter_by(idApi=post_id).first().comments
+    current_user_items = Post.query.get_or_404(post_id).comments
+    current_user_items = [item for item in current_user_items if not item.archive]
     itemLength = len(current_user_items)
 
-    return render_template('display_comments.html',
+    return render_template(
+                            'display_comments.html',
                             current_user_items=current_user_items,
-                            itemLength=itemLength
-                            )
+                            itemLength=itemLength,
+                            post_id=post_id
+                        )
+
+
+@app.route('/ajout/comment/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def ajouterComment(post_id):
+    commentform = CommentForm()
+    if commentform.validate_on_submit():
+        comment_instance = Comment(
+            postId  = post_id,
+            name    = commentform.name.data,
+            email   = commentform.email.data,
+            body    = commentform.body.data,
+            archive = False
+        )
+        db.session.add(comment_instance)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        commentform = CommentForm(formdata=None)
+    return render_template('ajouter_comments.html', commentform=commentform, post_id=post_id)
 
 
 # les modifications
-@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+@app.route('/update/album/<int:album_id>', methods=['GET', 'POST'])
+@login_required
+def updateAlbum(album_id):
+    albumform = AlbumForm()
+    album_to_update = Album.query.filter_by(idApi = album_id).first()
+    print(album_to_update.idApi)
+    if not album_to_update.idApi:
+        album_to_update = Album.query.filter_by(id=album_id).first()
+    albumform.title.data = album_to_update.title
+    if request.method == 'POST':
+        album_to_update.title = request.form.get('title')
+        db.session.commit()
+        return redirect(url_for('menuItem', item='albums'))
+    else:
+        return render_template('update_album.html',
+                                albumform=albumform,
+                                album_to_update=album_to_update
+                                )
+
+    return render_template('update_album.html',
+                            albumform=albumform,
+                            album_to_update=album_to_update
+                            )
+@app.route('/update/post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def updatePost(post_id):
     postform = PostForm()
@@ -392,6 +489,28 @@ def updatePost(post_id):
                         postform=postform,
                         post_to_update=post_to_update
                         )
+
+@app.route('/update/todo/<int:todo_id>', methods=['GET', 'POST'])
+@login_required
+def updateTodo(todo_id):
+    todo_to_update = Todo.query.get(todo_id)
+    todoform = TodoForm()
+    todoform.title.data = todo_to_update.title
+    if request.method == 'POST':
+        todo_to_update.title = request.form.get('title')
+        try:
+            db.session.commit()
+            return redirect(url_for('menuItem', item='todos'))
+        except:
+            return render_template('update_todo.html',
+                                    todoform=todoform,
+                                    todo_to_update=todo_to_update
+                                    )
+    else:
+        return render_template('update_todo.html',
+                                todoform=todoform,
+                                todo_to_update=todo_to_update
+                                )
 
 
 # les routes des formulaires d'ajout
