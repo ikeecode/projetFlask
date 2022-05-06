@@ -331,6 +331,7 @@ def postArchive():
         itemLength=itemLength
     )
 
+
 @app.route('/archive/todos', methods=['GET', 'POST'])
 @login_required
 def todoArchive():
@@ -342,6 +343,7 @@ def todoArchive():
             current_user_items_from_archive=current_user_items_from_archive,
             itemLength=itemLength
         )
+
 
 # les suppressions ou archivage
 @app.route('/delete/todo/<int:todo_id>')
@@ -383,6 +385,7 @@ def deletePost(post_id):
         return redirect(url_for('menuItem', item='post'))
     else:
         pass
+
 
 @app.route('/delete/comment/<int:comment_id>')
 @login_required
@@ -441,6 +444,71 @@ def ajouterComment(post_id):
 
 
 # les modifications
+@app.route('/update/infouser', methods=['GET', 'POST'])
+@login_required
+def updateInfoUser():
+    user_address = Address.query.get_or_404(current_user.addressId)
+    user_company = Company.query.get_or_404(current_user.companyId)
+
+    formAddress = AddressForm()
+    formCompany = CompanyForm()
+    formUser    = UserForm()
+
+    formCompany.name.data        = user_company.name
+    formCompany.catchPhrase.data = user_company.catchPhrase
+    formCompany.bs.data          = user_company.bs
+
+    formAddress.street.data     = user_address.street
+    formAddress.suite.data      = user_address.suite
+    formAddress.city.data       = user_address.city
+    formAddress.zipcode.data    = user_address.zipcode
+    formAddress.lat.data        = user_address.lat
+    formAddress.lng.data        = user_address.lng
+
+    formUser.nameUser.data      = current_user.name
+    formUser.username.data      = current_user.username
+    formUser.email.data         = current_user.email
+    formUser.phone.data         = current_user.phone
+    formUser.website.data       = current_user.website
+    formUser.password.data      = current_user.password
+
+    if request.method ==   'POST':
+            formCompany.name.data        = request.form.get('name')
+            formCompany.catchPhrase.data = request.form.get('catchPhrase')
+            formCompany.bs.data          = request.form.get('bs')
+
+            formAddress.street.data     = request.form.get('street')
+            formAddress.suite.data      = request.form.get('suite')
+            formAddress.city.data       = request.form.get('city')
+            formAddress.zipcode.data    = request.form.get('zipcode')
+            formAddress.lat.data        = request.form.get('lat')
+            formAddress.lng.data        = request.form.get('lng')
+
+            formUser.nameUser.data      = request.form.get('nameUser')
+            formUser.username.data      = request.form.get('username')
+            formUser.email.data         = request.form.get('email')
+            formUser.phone.data         = request.form.get('phone')
+            formUser.website.data       = request.form.get('website')
+            formUser.password.data      = request.form.get('password')
+
+            try:
+                db.session.commit()
+                return redirect(url_for('menuItem', item='infosuser'))
+            except:
+                return render_template(
+                                        'update_infosuser.html',
+                                        formAddress=formAddress,
+                                        formCompany=formCompany,
+                                        formUser=formUser
+                                    )
+    return render_template(
+                            'update_infosuser.html',
+                            formAddress=formAddress,
+                            formCompany=formCompany,
+                            formUser=formUser
+                        )
+
+
 @app.route('/update/album/<int:album_id>', methods=['GET', 'POST'])
 @login_required
 def updateAlbum(album_id):
@@ -464,6 +532,8 @@ def updateAlbum(album_id):
                             albumform=albumform,
                             album_to_update=album_to_update
                             )
+
+
 @app.route('/update/post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def updatePost(post_id):
@@ -575,6 +645,7 @@ def ajouterAlbum():
             db.session.rollback()
         albumform = AlbumForm(formdata=None)
     return render_template('ajouter_album.html', albumform=albumform)
+
 
 @app.route('/ajout/user', methods=['GET', 'POST'])
 def ajouter_user():

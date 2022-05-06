@@ -26,10 +26,6 @@
         </li>
         {% endfor %}
     </ul>
-    <form class="" action="" method="post">
-        <input type="submit" name="submit-button" value="charger">
-        <input type="submit" name="submit-button" value="ajouter">
-    </form>
     {% else %}
     <h4>Ici sont les archives des todos </h4>
     {% if current_user_items_from_archive %}
@@ -50,5 +46,9 @@
     </ul>
     {% endif %}
     {% endif %}
+    <form class="" action="" method="post">
+        <input type="submit" name="submit-button" value="charger">
+        <input type="submit" name="submit-button" value="ajouter">
+    </form>
 </div>
 {% endblock sectionRight %}
