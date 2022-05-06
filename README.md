@@ -45,7 +45,7 @@ sudo -u postgres createuser -P -s -e [votre nom d'utilisateur]
 
 #### Creation de la base de donnee ayant le meme nom que votre utilisateur
 ```bash
-sudo -u postgres createdb [votre nom d'utilisateur]
+sudo -u postgres createdb [votre nom d\'utilisateur]
 ```
 
 
@@ -56,7 +56,7 @@ python3 setup.py
 ```
 #### editez les fichiers models/users.py et index.py et ajouter la ligne suivante
 ```python3
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://[votre nom d'utilisateur]:[votre mot de passe]@localhost/[le nom de la base de donnee]'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://[votre nom d'utilisateur]:[votre mot de passe]@localhost/[le nom de la base de donnee]"
 ```
 #### Executez le fichier index avec la commande suivante pour lancer l'application
 ```bash
