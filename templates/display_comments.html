@@ -25,7 +25,7 @@
             <a id="body" href="#">{{ current_user_items[i].body | capitalize }}</a>
             <div class="submenu">
               <a id="delete" href="{{ url_for('deleteComment', comment_id=current_user_items[i].id) }}"><button>Supprimer</button></a>
-              <!-- <a href=""><button type="button" name="button">Update</button></a> -->
+              <a href="{{ url_for('updateComment', comment_id=current_user_items[i].id )}}"><button type="button" name="button">Update</button></a>
             </div>
         </li>
         {% endfor %}

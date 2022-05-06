@@ -620,6 +620,36 @@ def updatePost(post_id):
                         post_to_update=post_to_update
                         )
 
+
+@app.route('/update/comment/<int:comment_id>', methods=['GET', 'POST'])
+@login_required
+def updateComment(comment_id):
+    comment_to_update = Comment.query.get_or_404(comment_id)
+    commentform = CommentForm()
+
+    commentform.name.data   = comment_to_update.name
+    commentform.email.data  = comment_to_update.email
+    commentform.body.data   = comment_to_update.body
+
+    if commentform.validate_on_submit():
+        comment_to_update.name  = commentform.name.data
+        comment_to_update.email = commentform.email.data
+        comment_to_update.body  = commentform.body.data
+
+        try:
+            db.session.commit()
+            return redirect(url_for('afficheComments', post_id=comment_to_update.postId))
+        except:
+            return render_template('update_comment.html',
+                                    commentform=commentform,
+                                    comment_to_update=comment_to_update,
+                                    comment_id=comment_id)
+    else:
+        return render_template('update_comment.html',
+                                commentform=commentform,
+                                comment_to_update=comment_to_update,
+                                comment_id=comment_id)
+
 @app.route('/update/todo/<int:todo_id>', methods=['GET', 'POST'])
 @login_required
 def updateTodo(todo_id):
