@@ -9,30 +9,30 @@
 ### Application flask
 #### Création d'un environnement virtuel avec python
 ```bash
-        python3 -m venv myproject
+python3 -m venv myproject
 ```
 
 > ! se placer dans le dossier qui contient  myproject
 
 #### Activation de votre environnement
 ```bash
-        source  myproject/bin/activate
+source  myproject/bin/activate
 ```
 
 
 #### Installation des paquets necessaires
 ```bash
-        pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 
 #### Installation du SGBD [postgresql](https://www.postgresql.org/download/linux/ubuntu/)
 
 ```bash
-        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-        sudo apt-get update
-        sudo apt-get -y install postgresql
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get -y install postgresql
 ```
 
 > Renseigner votre nom d'utilisateur ubuntu pour votre utilisateur postgres
@@ -40,30 +40,30 @@
 
 #### Creation de votre utilisateur sur postgres
 ```bash
-        sudo -u postgres createuser -P -s -e [votre nom d'utilisateur]
+sudo -u postgres createuser -P -s -e [votre nom d'utilisateur]
 ```
 
 #### Creation de la base de donnee ayant le meme nom que votre utilisateur
 ```bash
-        sudo -u postgres createdb [votre nom d'utilisateur]
+sudo -u postgres createdb [votre nom d'utilisateur]
 ```
 
 
 > Assurez vous d'avoir le fichier setup.py
 #### Creation de votre base de donnee et des tables pour le projet
 ```bash
-        python3 setup.py
+python3 setup.py
 ```
 #### editez les fichiers models/users.py et index.py et ajouter la ligne suivante
 ```python3
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://[votre nom d'utilisateur]:[votre mot de passe]@localhost/[le nom de la base de donnee]'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://[votre nom d'utilisateur]:[votre mot de passe]@localhost/[le nom de la base de donnee]'
 ```
 #### Executez le fichier index avec la commande suivante pour lancer l'application
 ```bash
-        python3 index.py
+python3 index.py
 ```
 
 #### Pour desactiver  votre environnement faites:
 ```bash
-        deactivate
+deactivate
 ```
