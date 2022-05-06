@@ -87,7 +87,7 @@ def chargementUser():
         if number < 0:
             flash('Evitez de mettre un nombre negatif')
         userDataNumber = User.query.order_by(User.id).count()
-        print(userDataNumber, '='*20)
+        # print(userDataNumber, '='*20)
         if number > userDataNumber:
             number_to_add = number - userDataNumber
             try:
@@ -95,8 +95,11 @@ def chargementUser():
             except:
                 pass
             myusers = User.query.order_by(User.id).all()
+            myusers = [item for item in myusers if not item.archive]
 
         myusers = User.query.order_by(User.id).all()
+        myusers = [item for item in myusers if not item.archive]
+
         userLength = len(myusers)
         # print('userLength', userLength)
         # print(myusers)
@@ -270,7 +273,11 @@ def menuItem(item):
             )
 
     elif item == 'albums':
-        current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
+        if current_user.fromApi:
+            current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
+        else:
+            current_user_items  = User.query.filter_by(id=current_user.id).first().albums
+
         itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
@@ -323,6 +330,21 @@ def menuItem(item):
 
 
 # affichage des archives
+
+@app.route('/archive/users', methods=['GET', 'POST'])
+def userArchive():
+    genForm = GeneratorForm()
+    current_user_items_from_archive  = User.query
+    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive==True]
+    itemLength = len(current_user_items_from_archive)
+    return render_template(
+        "loadUsers.html",
+        genForm=genForm,
+        current_user_items_from_archive=current_user_items_from_archive,
+
+        itemLength=itemLength
+    )
+
 @app.route('/archive/post')
 @login_required
 def postArchive():
@@ -333,6 +355,20 @@ def postArchive():
         "post.html",
         current_user_items_from_archive=current_user_items_from_archive,
         itemLength=itemLength
+    )
+
+
+@app.route('/archive/post/<int:post_id>/comments')
+@login_required
+def commentsArchive(post_id):
+    current_user_items_from_archive = Post.query.filter_by(idApi=post_id).first().comments
+    current_user_items_from_archive = [item for item in current_user_items_from_archive if item.archive]
+    itemLength = len(current_user_items_from_archive)
+    return render_template(
+        "display_comments.html",
+        current_user_items_from_archive=current_user_items_from_archive,
+        itemLength=itemLength,
+        post_id=post_id
     )
 
 
@@ -350,6 +386,25 @@ def todoArchive():
 
 
 # les suppressions ou archivage
+@app.route('/delete/user/<int:user_id>')
+def deleteUser(user_id):
+    user_to_delete = User.query.get_or_404(user_id)
+    if not user_to_delete.archive:
+        user_to_delete.archive = True
+        try:
+            db.session.commit()
+            flash("User deleted !")
+            return redirect(url_for('chargementUser'))
+        except:
+            return redirect(url_for('chargementUser'))
+    else:
+        user_to_delete.archive = False
+        db.session.commit()
+        return redirect(url_for('chargementUser'))
+
+
+
+
 @app.route('/delete/todo/<int:todo_id>')
 @login_required
 def deleteTodo(todo_id):
@@ -391,30 +446,33 @@ def deletePost(post_id):
         pass
 
 
-@app.route('/delete/comment/<int:comment_id>')
+@app.route('/delete/comment/<int:comment_id>', methods=['GET', 'POST'])
 @login_required
 def deleteComment(comment_id):
+    print(comment_id)
     comment_to_delete = Comment.query.get_or_404(comment_id)
+    print(comment_to_delete.postId, comment_to_delete.id)
     if not comment_to_delete.archive:
         comment_to_delete.archive = True
         try:
             db.session.commit()
-            flash('Le commentaire est supprimé !')
+            # flash('Le commentaire est supprimé !')
             return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
         except:
-            flash('Une erreur a eu lieu, veuillez reessayer ! ')
+            # flash('Une erreur a eu lieu, veuillez reessayer ! ')
             return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
-    else:
+    elif comment_to_delete.archive:
         comment_to_delete.archive = False
         db.session.commit()
         return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
-
+    else:
+        pass
 
 # afficher les commentaires d'un post
 @app.route('/post/<int:post_id>/comments')
 @login_required
 def afficheComments(post_id):
-    current_user_items = Post.query.get_or_404(post_id).comments
+    current_user_items = Post.query.filter_by(idApi=post_id).first().comments
     current_user_items = [item for item in current_user_items if not item.archive]
     itemLength = len(current_user_items)
 
@@ -451,8 +509,8 @@ def ajouterComment(post_id):
 @app.route('/update/infouser', methods=['GET', 'POST'])
 @login_required
 def updateInfoUser():
-    user_address = Address.query.get_or_404(current_user.addressId)
-    user_company = Company.query.get_or_404(current_user.companyId)
+    user_address = Address.query.filter_by(id=current_user.addressId).first()
+    user_company = Company.query.filter_by(id=current_user.companyId).first()
 
     formAddress = AddressForm()
     formCompany = CompanyForm()
@@ -476,24 +534,25 @@ def updateInfoUser():
     formUser.website.data       = current_user.website
     formUser.password.data      = current_user.password
 
-    if request.method ==   'POST':
-            formCompany.name.data        = request.form.get('name')
-            formCompany.catchPhrase.data = request.form.get('catchPhrase')
-            formCompany.bs.data          = request.form.get('bs')
+    if formUser.validate_on_submit():
+    # if request.method ==   'POST':
+            user_company.name        = request.form.get('name')
+            user_company.catchPhrase = request.form.get('catchPhrase')
+            user_company.bs          = request.form.get('bs')
 
-            formAddress.street.data     = request.form.get('street')
-            formAddress.suite.data      = request.form.get('suite')
-            formAddress.city.data       = request.form.get('city')
-            formAddress.zipcode.data    = request.form.get('zipcode')
-            formAddress.lat.data        = request.form.get('lat')
-            formAddress.lng.data        = request.form.get('lng')
+            user_address.street      = request.form.get('street')
+            user_address.suite       = request.form.get('suite')
+            user_address.city        = request.form.get('city')
+            user_address.zipcode     = request.form.get('zipcode')
+            user_address.lat         = request.form.get('lat')
+            user_address.lng         = request.form.get('lng')
 
-            formUser.nameUser.data      = request.form.get('nameUser')
-            formUser.username.data      = request.form.get('username')
-            formUser.email.data         = request.form.get('email')
-            formUser.phone.data         = request.form.get('phone')
-            formUser.website.data       = request.form.get('website')
-            formUser.password.data      = request.form.get('password')
+            current_user.nameUser       = request.form.get('nameUser')
+            current_user.username       = request.form.get('username')
+            current_user.email          = request.form.get('email')
+            current_user.phone          = request.form.get('phone')
+            current_user.website        = request.form.get('website')
+            current_user.password       = request.form.get('password')
 
             try:
                 db.session.commit()
@@ -517,11 +576,11 @@ def updateInfoUser():
 @login_required
 def updateAlbum(album_id):
     albumform = AlbumForm()
-    album_to_update = Album.query.filter_by(idApi = album_id).first()
-    print(album_to_update.idApi)
-    if not album_to_update.idApi:
-        album_to_update = Album.query.filter_by(id=album_id).first()
+    album_to_update = Album.query.filter_by(id = album_id).first()
+    # if not album_to_update.idApi:
+    #     album_to_update = Album.query.filter_by(id=album_id).first()
     albumform.title.data = album_to_update.title
+
     if request.method == 'POST':
         album_to_update.title = request.form.get('title')
         db.session.commit()
@@ -529,7 +588,8 @@ def updateAlbum(album_id):
     else:
         return render_template('update_album.html',
                                 albumform=albumform,
-                                album_to_update=album_to_update
+                                album_to_update=album_to_update,
+                                album_id=album_id
                                 )
 
     return render_template('update_album.html',
@@ -563,6 +623,36 @@ def updatePost(post_id):
                         postform=postform,
                         post_to_update=post_to_update
                         )
+
+
+@app.route('/update/comment/<int:comment_id>', methods=['GET', 'POST'])
+@login_required
+def updateComment(comment_id):
+    comment_to_update = Comment.query.get_or_404(comment_id)
+    commentform = CommentForm()
+
+    commentform.name.data   = comment_to_update.name
+    commentform.email.data  = comment_to_update.email
+    commentform.body.data   = comment_to_update.body
+
+    if commentform.validate_on_submit():
+        comment_to_update.name  = commentform.name.data
+        comment_to_update.email = commentform.email.data
+        comment_to_update.body  = commentform.body.data
+
+        try:
+            db.session.commit()
+            return redirect(url_for('afficheComments', post_id=comment_to_update.postId))
+        except:
+            return render_template('update_comment.html',
+                                    commentform=commentform,
+                                    comment_to_update=comment_to_update,
+                                    comment_id=comment_id)
+    else:
+        return render_template('update_comment.html',
+                                commentform=commentform,
+                                comment_to_update=comment_to_update,
+                                comment_id=comment_id)
 
 @app.route('/update/todo/<int:todo_id>', methods=['GET', 'POST'])
 @login_required
@@ -616,7 +706,7 @@ def ajouterTodo():
     todoform = TodoForm()
     if todoform.validate_on_submit():
         todo_instance = Todo(
-            userId  = current_user.idApi if current_user.idApi else current_user.id,
+            userId  = current_user.idApi if current_user.fromApi else current_user.id,
             title   = todoform.title.data,
             completed = False
         )
@@ -638,7 +728,7 @@ def ajouterAlbum():
     albumform = AlbumForm()
     if albumform.validate_on_submit():
         album_instance = Album(
-            userId = current_user.idApi if current_user.idApi else current_user.id,
+            userId = current_user.idApi if current_user.fromApi else current_user.id,
             idApi  = None,
             title  = albumform.title.data
         )

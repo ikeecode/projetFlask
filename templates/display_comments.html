@@ -12,8 +12,8 @@
     </div>
 {% endfor %}
 <div id="subBody">
-  <a href="{{ url_for('postArchive')}}"><button type="button" name="button">Voir les archives</button></a>
   {% if current_user_items %}
+  <a href="{{ url_for('commentsArchive', post_id=post_id)}}"><button type="button" name="button">Voir les archives</button></a>
     <h4>les commentaires du post {{ post_id }}</h4>
 
     <ul id="postholder">
@@ -25,14 +25,14 @@
             <a id="body" href="#">{{ current_user_items[i].body | capitalize }}</a>
             <div class="submenu">
               <a id="delete" href="{{ url_for('deleteComment', comment_id=current_user_items[i].id) }}"><button>Supprimer</button></a>
-              <a href=""><button type="button" name="button">Update</button></a>
+              <a href="{{ url_for('updateComment', comment_id=current_user_items[i].id )}}"><button type="button" name="button">Update</button></a>
             </div>
         </li>
         {% endfor %}
     </ul>
 
     {% else %}
-    <h4>Ici vous avez les archives </h4>
+    <h4>Ici vous avez les archives  des commentaires du posts {{ post_id }}</h4>
     {% if current_user_items_from_archive %}
     <ul id="postholder_second">
         {% for i in range(itemLength) %}
@@ -41,12 +41,13 @@
             <a id="title" href="#">Name : {{ current_user_items_from_archive[i].name | capitalize }}</a>
             <a id="body" href="#">{{ current_user_items_from_archive[i].body | capitalize }}</a>
             <div class="submenu">
-              <a id="delete" href="{{ url_for('deletePost', post_id=current_user_items_from_archive[i].id) }}"><button>Reprendre</button></a>
-              <a href="{{ url_for('updatePost', post_id=current_user_items_from_archive[i].id) }}"><button type="button" name="button">Update</button></a>
+              <a id="delete" href="{{ url_for('deleteComment', comment_id=current_user_items_from_archive[i].id) }}"><button>Reprendre</button></a>
             </div>
         </li>
         {% endfor %}
     </ul>
+
+    <a href="{{ url_for('afficheComments',post_id=post_id )}}"><button type="button" name="button">Retour</button></a>
     {% endif %}
   {% endif %}
     <!-- <form class="" action="" method="post">

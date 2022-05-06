@@ -1,0 +1,42 @@
+{% extends 'user_index.html' %}
+{% block sectionRight %}
+
+{% if current_user.idApi %}
+  <h4>Update du commentaire  {{ comment_id }}</h4>
+  <form class="" action="" method="post">
+    {{ commentform.hidden_tag() }}
+
+    {{ commentform.name.label(class='form-label') }}
+    {{ commentform.name(class='form-control') }}
+    <br>
+    {{ commentform.email.label(class='form-label') }}
+    {{ commentform.email(class='form-control') }}
+    <br>
+    {{ commentform.body.label(class='form-label') }}
+    {{ commentform.body(class='form-control') }}
+    <br>
+    {{ commentform.addBtn }}
+  </form>
+
+{% else %}
+  <h4>Update du commentaire   {{ comment_id }}</h4>
+  <form class="" action="" method="post">
+    {{ commentform.hidden_tag() }}
+    {{ commentform.name.label(class='form-label') }}
+    {{ commentform.name(class='form-control') }}
+    <br>
+    {{ commentform.email.label(class='form-label') }}
+    {{ commentform.email(class='form-control') }}
+    <br>
+    {{ commentform.body.label(class='form-label') }}
+    {{ commentform.body(class='form-control') }}
+    <br>
+    {{ commentform.addBtn }}
+  </form>
+{% endif %}
+<br>
+<br><br>
+<br>
+<br>
+<a href="{{ url_for('afficheComments', post_id=comment_to_update.postId) }}"><button type="button" name="button">Retour</button></a>
+{% endblock sectionRight %}
