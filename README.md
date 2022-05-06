@@ -54,6 +54,10 @@
 ```bash
         python3 setup.py
 ```
+#### editez les fichiers models/users.py et index.py et ajouter la ligne suivante
+```python3
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://[votre nom d'utilisateur]:[votre mot de passe]@localhost/[le nom de la base de donnee]'
+```
 #### Executez le fichier index avec la commande suivante pour lancer l'application
 ```bash
         python3 index.py
