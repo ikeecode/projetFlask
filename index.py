@@ -87,7 +87,7 @@ def chargementUser():
         if number < 0:
             flash('Evitez de mettre un nombre negatif')
         userDataNumber = User.query.order_by(User.id).count()
-        print(userDataNumber, '='*20)
+        # print(userDataNumber, '='*20)
         if number > userDataNumber:
             number_to_add = number - userDataNumber
             try:
@@ -95,8 +95,11 @@ def chargementUser():
             except:
                 pass
             myusers = User.query.order_by(User.id).all()
+            myusers = [item for item in myusers if not item.archive]
 
         myusers = User.query.order_by(User.id).all()
+        myusers = [item for item in myusers if not item.archive]
+
         userLength = len(myusers)
         # print('userLength', userLength)
         # print(myusers)
@@ -319,6 +322,20 @@ def menuItem(item):
 
 
 # affichage des archives
+
+@app.route('/archive/users', methods=['GET', 'POST'])
+def userArchive():
+    genForm = GeneratorForm()
+    current_user_items_from_archive  = User.query
+    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive==True]
+    itemLength = len(current_user_items_from_archive)
+    return render_template(
+        "loadUsers.html",
+        genForm=genForm,
+        current_user_items_from_archive=current_user_items_from_archive,
+        itemLength=itemLength
+    )
+
 @app.route('/archive/post')
 @login_required
 def postArchive():
@@ -346,6 +363,25 @@ def todoArchive():
 
 
 # les suppressions ou archivage
+@app.route('/delete/user/<int:user_id>')
+def deleteUser(user_id):
+    user_to_delete = User.query.get_or_404(user_id)
+    if not user_to_delete.archive:
+        user_to_delete.archive = True
+        try:
+            db.session.commit()
+            flash("User deleted !")
+            return redirect(url_for('chargementUser'))
+        except:
+            return redirect(url_for('chargementUser'))
+    else:
+        user_to_delete.archive = False
+        db.session.commit()
+        return redirect(url_for('chargementUser'))
+
+
+
+
 @app.route('/delete/todo/<int:todo_id>')
 @login_required
 def deleteTodo(todo_id):
@@ -447,8 +483,8 @@ def ajouterComment(post_id):
 @app.route('/update/infouser', methods=['GET', 'POST'])
 @login_required
 def updateInfoUser():
-    user_address = Address.query.get_or_404(current_user.addressId)
-    user_company = Company.query.get_or_404(current_user.companyId)
+    user_address = Address.query.filter_by(id=current_user.addressId).first()
+    user_company = Company.query.filter_by(id=current_user.companyId).first()
 
     formAddress = AddressForm()
     formCompany = CompanyForm()
@@ -472,24 +508,25 @@ def updateInfoUser():
     formUser.website.data       = current_user.website
     formUser.password.data      = current_user.password
 
-    if request.method ==   'POST':
-            formCompany.name.data        = request.form.get('name')
-            formCompany.catchPhrase.data = request.form.get('catchPhrase')
-            formCompany.bs.data          = request.form.get('bs')
+    if formUser.validate_on_submit():
+    # if request.method ==   'POST':
+            user_company.name        = request.form.get('name')
+            user_company.catchPhrase = request.form.get('catchPhrase')
+            user_company.bs          = request.form.get('bs')
 
-            formAddress.street.data     = request.form.get('street')
-            formAddress.suite.data      = request.form.get('suite')
-            formAddress.city.data       = request.form.get('city')
-            formAddress.zipcode.data    = request.form.get('zipcode')
-            formAddress.lat.data        = request.form.get('lat')
-            formAddress.lng.data        = request.form.get('lng')
+            user_address.street      = request.form.get('street')
+            user_address.suite       = request.form.get('suite')
+            user_address.city        = request.form.get('city')
+            user_address.zipcode     = request.form.get('zipcode')
+            user_address.lat         = request.form.get('lat')
+            user_address.lng         = request.form.get('lng')
 
-            formUser.nameUser.data      = request.form.get('nameUser')
-            formUser.username.data      = request.form.get('username')
-            formUser.email.data         = request.form.get('email')
-            formUser.phone.data         = request.form.get('phone')
-            formUser.website.data       = request.form.get('website')
-            formUser.password.data      = request.form.get('password')
+            current_user.nameUser       = request.form.get('nameUser')
+            current_user.username       = request.form.get('username')
+            current_user.email          = request.form.get('email')
+            current_user.phone          = request.form.get('phone')
+            current_user.website        = request.form.get('website')
+            current_user.password       = request.form.get('password')
 
             try:
                 db.session.commit()

@@ -1,7 +1,7 @@
 import psycopg2
 from models.users import db, app
 
-user = input('Entrer du user :  ')
+user = input('Entrer nom du user :  ')
 password = input('Entrer votre mot de passe :  ')
 database = input('Entrer le nom de la base de donnee à creer :  ')
 

@@ -22,18 +22,20 @@ class FromApi:
             response = requests.get(cls.api_url + url).json()
             return response
         except:
-            print('Verifiez la connexion')
+            # print('Verifiez la connexion')
+            pass
 
     @classmethod
     def getApiUrlPhoto(cls):
         try:
             api_image = requests.get(cls.requete)
             api_image = api_image.json()
-            api_image = api_image['data']
-            api_image = api_image['memes']
+            api_image = api_image.get('data')
+            api_image = api_image.get('memes')
             return choice(api_image)['url']
         except:
-            print("Vérifiez la connexion")
+            # print("Vérifiez la connexion")
+            pass
 
     # # offline work
     # @classmethod
@@ -44,16 +46,17 @@ class FromApi:
 
     @classmethod
     def prepare_photos(cls, album_id):
+        url_random = cls.getApiUrlPhoto()
         endpoint = f'albums/{album_id}/photos'
         photos   = cls.api_to_json(endpoint)
         for photo in photos:
             photo_instance    = Photo(
                 albumId       = photo.get('albumId'),
                 title         = photo.get('title'),
-                url           = cls.getApiUrlPhoto(),
-                thumbnailurl = photo.get('thumbnailUrl')
+                url           = url_random,
+                thumbnailurl  = url_random
             )
-            print(photo_instance)
+            # print(photo_instance)
             db.session.add(photo_instance)
 
     @classmethod
@@ -66,17 +69,17 @@ class FromApi:
                 idApi  = album.get('id'),
                 title  = album.get('title')
             )
-            print(album_instance)
+            # print(album_instance)
             db.session.add(album_instance)
             album_id = album.get('id')
             cls.prepare_photos(album_id)
 
         try:
             db.session.commit()
-            print('ok')
+            # print('ok')
         except:
             db.session.rollback()
-            print('there is problem')
+            # print('there is problem')
 
 
 
@@ -153,7 +156,7 @@ class FromApi:
         if number <= len(users):
             for i, user in enumerate(users):
                 if cls.compteur == number:
-                    print('stop'*10)
+                    # print('stop'*10)
                     break
                 # print('number', number, 'compteur', cls.compteur)
 
@@ -224,13 +227,14 @@ class FromApi:
                     try:
                         db.session.commit()
                         cls.compteur +=1
-                        print('insertion..')
+                        # print('insertion..')
                     except:
                         db.session.rollback()
                         continue
 
         else:
-            print('L\'api ne contient que 10 users')
+            # print('L\'api ne contient que 10 users')
+            pass
 
 
 
