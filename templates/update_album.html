@@ -2,7 +2,7 @@
 {% block sectionRight %}
 
 {% if current_user.idApi %}
-  <h4>Update page de fromAPI  {{ current_user.idApi }}</h4>
+  <h4>Update de l'album {{ album_id }}</h4>
   <form class="" action="" method="post">
     {{ albumform.hidden_tag() }}
 
@@ -13,7 +13,7 @@
   </form>
 
 {% else %}
-  <h4>Update page de {{ current_user.id }}</h4>
+  <h4>Update de l'album  {{ album_id }}</h4>
   <form class="" action="" method="post">
     {{ albumform.hidden_tag() }}
     {{ albumform.title.label(class='form-label') }}
@@ -22,4 +22,9 @@
     {{ albumform.addBtn }}
   </form>
 {% endif %}
+<br>
+<br><br>
+<br>
+<br>
+<a href="{{ url_for('menuItem', item='albums')}}"><button type="button" name="button">Retour</button></a>
 {% endblock sectionRight %}
