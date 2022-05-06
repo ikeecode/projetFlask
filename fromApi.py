@@ -53,7 +53,7 @@ class FromApi:
                 url           = cls.getApiUrlPhoto(),
                 thumbnailurl = photo.get('thumbnailUrl')
             )
-
+            print(photo_instance)
             db.session.add(photo_instance)
 
     @classmethod
@@ -66,7 +66,7 @@ class FromApi:
                 idApi  = album.get('id'),
                 title  = album.get('title')
             )
-            # print(album_instance)
+            print(album_instance)
             db.session.add(album_instance)
             album_id = album.get('id')
             cls.prepare_photos(album_id)
