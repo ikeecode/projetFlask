@@ -46,3 +46,12 @@ form input {
     font-size: 20px;
     box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25), 4px 6px 4px rgba(0, 0, 0, 0.25)
 }
+
+article#sectionLeft button#buttonAlbum {
+    border-color: #e7e7e7;
+    background-color: #595959ff;
+}
+
+article#sectionLeft button#buttonAlbum a {
+    color: #ffffff;
+}
