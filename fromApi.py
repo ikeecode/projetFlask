@@ -240,6 +240,6 @@ class FromApi:
 
 
 # FromApi.prepare_users(number=1)
-# FromApi.prepare_posts(user_id=1)
-# FromApi.prepare_todos(user_id=1)
-# FromApi.prepare_albums(1)
+# FromApi.prepare_posts(user_id=4)
+# FromApi.prepare_todos(user_id=4)
+# FromApi.prepare_albums(4)

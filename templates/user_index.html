@@ -4,18 +4,16 @@
 <div id="userIndex">
     <div id="articles">
         <article id="sectionLeft">
-            <img src="{{url_for('static', filename='img/avatar.svg')}}" alt="phototProfil" >
+            <img src="{{url_for('static', filename='img/avatar.svg')}}" alt="phototProfil">
             <br>
             <p> {{ current_user.email }} </p>
-            <button><a href="{{ url_for('menuItem', item='post') }}">POSTS</a></button>
-            <button><a href="{{ url_for('menuItem', item='albums') }}">ALBUMS</a></button>
-            <button><a href="{{ url_for('menuItem', item='todos') }}">TODOS</a></button>
-            <button><a href="{{ url_for('menuItem', item='infosuser') }}">INFOS USER</a></button>
+            <button id="buttonPost"><a href="{{ url_for('menuItem', item='post') }}">POSTS</a></button>
+            <button id="buttonAlbum"><a href="{{ url_for('menuItem', item='albums') }}">ALBUMS</a></button>
+            <button id="buttonTodos"><a href="{{ url_for('menuItem', item='todos') }}">TODOS</a></button>
+            <button id="buttonInfoUser"><a href="{{ url_for('menuItem', item='infosuser') }}">INFOS USER</a></button>
         </article>
         <article id="sectionRight">
-          {% block sectionRight %}
-
-          {% endblock sectionRight %}
+            {% block sectionRight %} {% endblock sectionRight %}
         </article>
     </div>
 </div>

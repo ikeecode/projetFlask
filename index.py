@@ -14,7 +14,7 @@ from random import choice
 
 # from models.users import app, db
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://marieme:marieme@localhost/flasko'
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # app.config['GOOGLEMAPS_KEY'] = 'AIzaSyCi1YySTBjwmSZ3BmmgIRYs-rHcgC0-zCY'
@@ -208,7 +208,11 @@ def menuItem(item):
         itemLength = len(current_user_items)
         if request.method == 'POST':
             if request.form['submit-button'] == 'charger':
-                # print('clicked ')
+                print('clicked ')
+                fp.prepare_posts(user_id=current_user.idApi)
+                print('done')
+
+
                 try:
                     fp.prepare_posts(user_id=current_user.idApi)
                 except:
