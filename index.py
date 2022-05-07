@@ -301,32 +301,15 @@ def menuItem(item):
 
     return render_template(f"{item}.html", current_user_items=current_user_items, itemLength=itemLength)
 
-
-
-# @app.route('/photos')
-# def photos():
-#     requete = 'https://api.imgflip.com/get_memes'
-#     requete1 = 'https://jsonplaceholder.typicode.com/photos'
-#     requete2 = 'https://ghibliapi.herokuapp.com/films'
-#     photoApi = requests.get(requete1)
-#     vl = 'https://picsum.photos/200/300?grayscale'
-#     data = photoApi.json()
-#     ghibli_api = requests.get(requete2)
-#     ghibli_api = ghibli_api.json()
-#     liste_img_ghibli = []
-#     for io in ghibli_api:
-#         liste_img_ghibli.append(io['image'])
-#     l_url = liste_img_ghibli
-#     l_pho = []
-#     for i in data:
-#         if i['albumId']==1:
-#             i['url']=choice(l_url)
-#             l_pho.append(i)
-#     return render_template('photos.html', l_pho=l_pho)
-
+"""
+######################################################################################################
+    LES FONCTIONS QUI DONNENT AFFICHES LES ARCHIVES
+######################################################################################################
+"""
 
 # affichage des archives
 
+# ARCHIVES USERS
 @app.route('/archive/users', methods=['GET', 'POST'])
 def userArchive():
     genForm = GeneratorForm()
@@ -341,6 +324,7 @@ def userArchive():
         itemLength=itemLength
     )
 
+# ARCHIVES POSTS
 @app.route('/archive/post')
 @login_required
 def postArchive():
@@ -353,7 +337,7 @@ def postArchive():
         itemLength=itemLength
     )
 
-
+# ARCHIVES COMMENTAIRES D'UN POSTS
 @app.route('/archive/post/<int:post_id>/comments')
 @login_required
 def commentsArchive(post_id):
@@ -367,7 +351,7 @@ def commentsArchive(post_id):
         post_id=post_id
     )
 
-
+# ARCHIVES TODOS
 @app.route('/archive/todos', methods=['GET', 'POST'])
 @login_required
 def todoArchive():
@@ -381,7 +365,13 @@ def todoArchive():
         )
 
 
-# les suppressions ou archivage
+"""
+###############################################################################################################
+LES FONCTIONS QUI PERMETTENT DE SUPPRIMER (ARCHIVER)
+###############################################################################################################
+"""
+
+# SUPPRESSION DES USERS
 @app.route('/delete/user/<int:user_id>')
 def deleteUser(user_id):
     user_to_delete = User.query.get_or_404(user_id)
@@ -400,7 +390,7 @@ def deleteUser(user_id):
 
 
 
-
+# SUPPRESSION DES TODOS
 @app.route('/delete/todo/<int:todo_id>')
 @login_required
 def deleteTodo(todo_id):
@@ -416,7 +406,7 @@ def deleteTodo(todo_id):
         return redirect(url_for('menuItem', item='todos'))
 
 
-
+# SUPPRESSION DES POSTS
 @app.route('/delete/post/<int:post_id>')
 @login_required
 def deletePost(post_id):
@@ -441,7 +431,7 @@ def deletePost(post_id):
     else:
         pass
 
-
+# SUPPRESSION DES COMMENTAIRES
 @app.route('/delete/comment/<int:comment_id>', methods=['GET', 'POST'])
 @login_required
 def deleteComment(comment_id):
@@ -464,6 +454,9 @@ def deleteComment(comment_id):
     else:
         pass
 
+
+
+# FONCTION PERMETTANT L'AFFICHAGE DES COMMENTS D'UN POST
 # afficher les commentaires d'un post
 @app.route('/post/<int:post_id>/comments')
 @login_required
@@ -479,28 +472,11 @@ def afficheComments(post_id):
                             post_id=post_id
                         )
 
-
-@app.route('/ajout/comment/<int:post_id>', methods=['GET', 'POST'])
-@login_required
-def ajouterComment(post_id):
-    commentform = CommentForm()
-    if commentform.validate_on_submit():
-        comment_instance = Comment(
-            postId  = post_id,
-            name    = commentform.name.data,
-            email   = commentform.email.data,
-            body    = commentform.body.data,
-            archive = False
-        )
-        db.session.add(comment_instance)
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-        commentform = CommentForm(formdata=None)
-    return render_template('ajouter_comments.html', commentform=commentform, post_id=post_id)
-
-
+"""
+#####################################################################################################
+LES FONCTIONS PERMETTANT DE FAIRE DES MODIFICATIONS (UPDATES)
+#####################################################################################################
+"""
 # les modifications
 @app.route('/update/infouser', methods=['GET', 'POST'])
 @login_required
@@ -673,7 +649,36 @@ def updateTodo(todo_id):
                                 )
 
 
+"""
+###################################################################################################
+LES FONCTIONS QUI PERMETTENT D'AJOUTER DANS LA BASE A TRAVERS UN FORMULAIRE
+###################################################################################################
+
+"""
+
 # les routes des formulaires d'ajout
+@app.route('/ajout/comment/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def ajouterComment(post_id):
+    commentform = CommentForm()
+    if commentform.validate_on_submit():
+        comment_instance = Comment(
+            postId  = post_id,
+            name    = commentform.name.data,
+            email   = commentform.email.data,
+            body    = commentform.body.data,
+            archive = False
+        )
+        db.session.add(comment_instance)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        commentform = CommentForm(formdata=None)
+    return render_template('ajouter_comments.html', commentform=commentform, post_id=post_id)
+
+
+
 @app.route('/ajout/post', methods=['GET', 'POST'])
 @login_required
 def ajouterPost():
