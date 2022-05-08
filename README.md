@@ -42,13 +42,6 @@ sudo apt-get -y install postgresql
 ```bash
 sudo -u postgres createuser -P -s -e [votre nom d'utilisateur]
 ```
-
-#### Creation de la base de donnee ayant le meme nom que votre utilisateur
-```bash
-sudo -u postgres createdb [votre nom d'utilisateur]
-```
-
-
 > Assurez vous d'avoir le fichier setup.py
 #### Creation de votre base de donnee et des tables pour le projet
 ```bash
@@ -58,6 +51,7 @@ python3 setup.py
 ```python3
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://[votre nom d'utilisateur]:[votre mot de passe]@localhost/[le nom de la base de donnee]"
 ```
+> NB: Mettez le nom de votre utilisateur et votre mot de passe de votre utilisateur postgres cree en haut
 #### Executez le fichier index avec la commande suivante pour lancer l'application
 ```bash
 python3 index.py
