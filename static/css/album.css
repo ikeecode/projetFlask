@@ -57,3 +57,27 @@ article#sectionLeft button#buttonAlbum {
 article#sectionLeft button#buttonAlbum a {
     color: #ffffff;
 }
+
+section{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+section button{
+  width: 70px;
+}
+
+section button#update:hover{
+  background-color: lightblue;
+}
+
+section button#delete:hover{
+  background-color: red;
+}
+
+section button#delete_:hover{
+  background-color: lightgreen;
+}

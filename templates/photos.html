@@ -7,7 +7,11 @@
 {% block sectionRight %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/photos.css') }}">
 <div id="subBody">
-  <a href="{{ url_for('menuItem', item='albums') }}"><button type="button" name="button">Retour</button></a>
+  <section>
+    <a href="{{ url_for('menuItem', item='albums') }}"><button type="button" name="button">Retour</button></a>
+    <a href="{{ url_for('ajouterPhoto', album_id=album_id)}}"><button type="button" name="button">Ajouter</button></a>
+    <a href="{{ url_for('photosArchive', album_id=album_id) }}"><button type="button" name="button">Archives</button></a>
+  </section>
   {% if photos %}
   <ul id="postholder">
     {% for i in range(photosLength) %}
@@ -20,7 +24,17 @@
     {% endfor %}
   </ul>
   {% else %}
-      <h4>There is no Albums in the Database</h4>
+  <h4>Les archives de  l'album {{ album_id }}</h4>
+      <ul id="postholder">
+        {% for i in range(photosLength) %}
+            <li>
+              <figure>
+                <a href="{{ url_for('view', photo_id= photos_from_archive[i].id ) }}"><img src="{{ photos_from_archive[i].thumbnailurl }}" alt=""></a>
+                <figcaption>{{ photos_from_archive[i].title[:10] }}</figcaption>
+              </figure>
+            </li>
+        {% endfor %}
+      </ul>
   {% endif %}
 </div>
 {% endblock sectionRight %}

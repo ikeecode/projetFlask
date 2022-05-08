@@ -181,8 +181,9 @@ def view(photo_id):
 @login_required
 def view_photos(album_id):
     photos = Album.query.filter_by(idApi=int(album_id)).first().photos
+    photos = [item for item in photos if not item.archive]
     photosLength = len(photos)
-    return render_template('photos.html', photos=photos, photosLength=photosLength)
+    return render_template('photos.html', photos=photos, photosLength=photosLength, album_id=album_id)
 
 @app.route('/menu/menuItem/<string:item>', methods=['GET', 'POST'])
 @login_required
@@ -275,8 +276,12 @@ def menuItem(item):
     elif item == 'albums':
         if current_user.fromApi:
             current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().albums
+            current_user_items  = [item for item in current_user_items if not item.archive]
+
         else:
             current_user_items  = User.query.filter_by(id=current_user.id).first().albums
+            current_user_items  = [item for item in current_user_items if not item.archive]
+
 
         itemLength = len(current_user_items)
         if request.method == 'POST':
@@ -307,7 +312,7 @@ def menuItem(item):
 
 """
 ######################################################################################################
-    LES FONCTIONS QUI DONNENT AFFICHES LES ARCHIVES
+    LES FONCTIONS QUI  AFFICHES LES ARCHIVES
 ######################################################################################################
 """
 
@@ -318,7 +323,7 @@ def menuItem(item):
 def userArchive():
     genForm = GeneratorForm()
     current_user_items_from_archive  = User.query
-    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive==True]
+    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive]
     itemLength = len(current_user_items_from_archive)
     return render_template(
         "loadUsers.html",
@@ -333,7 +338,7 @@ def userArchive():
 @login_required
 def postArchive():
     current_user_items_from_archive  = User.query.filter_by(idApi=current_user.idApi).first().posts
-    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive==True]
+    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive]
     itemLength = len(current_user_items_from_archive)
     return render_template(
         "post.html",
@@ -368,6 +373,27 @@ def todoArchive():
             itemLength=itemLength
         )
 
+# ARCHIVES DES ALBUMS D'UN USER
+@app.route('/archive/albums')
+@login_required
+def albumsArchive():
+    current_user_items_from_archive  = User.query.filter_by(idApi=current_user.idApi).first().albums
+    current_user_items_from_archive  = [item for item in current_user_items_from_archive if item.archive]
+    itemLength = len(current_user_items_from_archive)
+    return render_template(
+        "albums.html",
+        current_user_items_from_archive=current_user_items_from_archive,
+        itemLength=itemLength
+    )
+
+# ARCHIVES DES PHOTOS D'UN ALBUM
+@app.route('/archive/<int:album_id>/photos')
+@login_required
+def photosArchive(album_id):
+    photos_from_archive = Album.query.filter_by(idApi=int(album_id)).first().photos
+    photos_from_archive = [item for item in photos_from_archive if item.archive]
+    photosLength = len(photos_from_archive)
+    return render_template('photos.html', photos_from_archive=photos_from_archive, photosLength=photosLength, album_id=album_id)
 
 """
 ###############################################################################################################
@@ -457,6 +483,38 @@ def deleteComment(comment_id):
         return redirect(url_for('afficheComments', post_id=comment_to_delete.postId))
     else:
         pass
+
+
+# SUPPRESSION D'UN ALBUM
+@app.route('/delete/album/<int:album_id>')
+@login_required
+def deleteAlbum(album_id):
+    album_to_delete = Album.query.get_or_404(album_id)
+    if not album_to_delete.archive:
+        album_to_delete.archive = True
+        db.session.commit()
+        return redirect(url_for('menuItem', item='albums'))
+    else:
+        album_to_delete.archive = False
+        db.session.commit()
+        return redirect(url_for('menuItem', item='albums'))
+
+
+
+# SUPPRESSION DE PHOTO
+@app.route('/delete/photo/<int:photo_id>')
+@login_required
+def deletePhoto(photo_id):
+    photo_to_delete = Photo.query.get(photo_id)
+    if not photo_to_delete.archive:
+        photo_to_delete.archive = True
+        db.session.commit()
+        return redirect(url_for('view_photos', album_id=photo_to_delete.albumId))
+    elif photo_to_delete.archive:
+        photo_to_delete.archive = False
+        db.session.commit()
+        return redirect(url_for('view_photos', album_id=photo_to_delete.albumId))
+
 
 
 
@@ -572,6 +630,29 @@ def updateAlbum(album_id):
                             albumform=albumform,
                             album_to_update=album_to_update
                             )
+
+
+@app.route('/update/photo/<int:photo_id>', methods=['GET', 'POST'])
+@login_required
+def updatePhoto(photo_id):
+    photoform = PhotoForm()
+    photo_to_update = Photo.query.filter_by(id=photo_id).first()
+    photoform.title.data = photo_to_update.title
+    photoform.url.data = photo_to_update.url
+    photoform.thumbnailurl.data = photo_to_update.thumbnailurl
+
+    if photoform.validate_on_submit():
+        photo_to_update.title = request.form.get('title')
+        photo_to_update.url = request.form.get('url')
+        photo_to_update.thumbnailurl = request.form.get('thumbnailurl')
+
+        db.session.commit()
+        return redirect(url_for('view', photo_id=photo_id))
+    else:
+        return render_template('update_photo.html', photoform=photoform, photo_id=photo_id)
+
+
+    return render_template('update_photo.html', photoform=photoform, photo_id=photo_id)
 
 
 @app.route('/update/post/<int:post_id>', methods=['GET', 'POST'])
@@ -744,6 +825,30 @@ def ajouterAlbum():
             db.session.rollback()
         albumform = AlbumForm(formdata=None)
     return render_template('ajouter_album.html', albumform=albumform)
+
+
+
+@app.route('/ajout/photo/toAlbum/<int:album_id>')
+@login_required
+def ajouterPhoto(album_id):
+    photoform = PhotoForm()
+
+    if photoform.validate_on_submit():
+        photo_instance   = Photo(
+            albumId      = album_id,
+            title        = photoform.title.data,
+            url          = photoform.url.data,
+            thumbnailurl = photoform.thumbnailurl.data
+        )
+        db.session.add(photo_instance)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        photoform = PhotoForm(formdata=None)
+
+    return render_template('ajouter_photo.html', photoform=photoform, album_id=album_id)
+
 
 
 @app.route('/ajout/user', methods=['GET', 'POST'])

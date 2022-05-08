@@ -7,6 +7,7 @@
 {% block sectionRight %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/album.css') }}">
 <div id="subBody">
+  <a href="{{ url_for('albumsArchive') }}"><button type="button" name="button">Archives</button></a>
   {% if current_user_items %}
     <h4>les Albums de {{ current_user.name }} </h4>
   <ul id="postholder">
@@ -14,19 +15,45 @@
       {% if current_user_items[i].idApi %}
       <li>
         <a href="{{ url_for('view_photos', album_id= current_user_items[i].idApi ) }}">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
-        <a href="{{ url_for('updateAlbum', album_id= current_user_items[i].id ) }}">update</a>
+        <section>
+          <a href="{{ url_for('updateAlbum', album_id= current_user_items[i].id ) }}"><button  id="update"  type="button" name="button">update</button></a>
+          <a href="{{ url_for('deleteAlbum', album_id=current_user_items[i].id) }}"><button  id="delete" type="button" name="button">delete</button></a>
+        </section>
       </li>
       {% else %}
       <li>
         <a href="{{ url_for('view_photos', album_id= current_user_items[i].id ) }}">{{ i + 1 }}.  {{ current_user_items[i].title }}</a>
-        <a href="{{ url_for('updateAlbum', album_id= current_user_items[i].id ) }}">update</a>
-
+        <section>
+          <a href="{{ url_for('updateAlbum', album_id= current_user_items[i].id ) }}"><button id="update" type="button" name="button">update</button></a>
+          <a href="{{ url_for('deleteAlbum', album_id=current_user_items[i].id) }}"><button  id="delete" type="button" name="button">delete</button></a>
+        </section>
       </li>
       {% endif %}
     {% endfor %}
   </ul>
   {% else %}
-      <h4>There is no Albums in the Database</h4>
+  <h4>les Archives de {{ current_user.name }} </h4>
+    <ul id="postholder">
+      {% for i in range(itemLength) %}
+        {% if current_user_items_from_archive[i].idApi %}
+        <li>
+          <a href="{{ url_for('view_photos', album_id= current_user_items_from_archive[i].idApi ) }}">{{ i + 1 }}.  {{ current_user_items_from_archive[i].title }}</a>
+          <section>
+            <a href="{{ url_for('updateAlbum', album_id= current_user_items_from_archive[i].id ) }}"><button  id="update"  type="button" name="button">update</button></a>
+            <a href="{{ url_for('deleteAlbum', album_id=current_user_items_from_archive[i].id) }}"><button  id="delete_" type="button" name="button">Prendre</button></a>
+          </section>
+        </li>
+        {% else %}
+        <li>
+          <a href="{{ url_for('view_photos', album_id= current_user_items_from_archive[i].id ) }}">{{ i + 1 }}.  {{ current_user_items_from_archive[i].title }}</a>
+          <section>
+            <a href="{{ url_for('updateAlbum', album_id= current_user_items_from_archive[i].id ) }}"><button id="update" type="button" name="button">update</button></a>
+            <a href="{{ url_for('deleteAlbum', album_id=current_user_items_from_archive[i].id) }}"><button  id="delete_" type="button" name="button">Prendre</button></a>
+          </section>
+        </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
   {% endif %}
   <form class="" action="" method="post">  <form class="" action="" method="post">
     <input type="submit" name="submit-button" value="charger">

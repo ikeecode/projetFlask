@@ -9,6 +9,10 @@
 <div id="subBody">
   <a href="{{ url_for('view_photos', album_id=photo.albumId) }}"><button type="button" name="button">Retour</button></a>
   <figure>
+    <section>
+      <a href="{{ url_for('updatePhoto', photo_id = photo.id) }}"><button type="button" name="button">update</button></a>
+      <a href="{{ url_for('deletePhoto', photo_id = photo.id) }}"><button type="button" name="button">supprimer</button></a>
+    </section>
     <img src="{{ photo.url }}" alt="{{ photo.title }}">
     <figcaption>{{ photo.title }}</figcaption>
   </figure>

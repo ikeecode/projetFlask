@@ -1,0 +1,43 @@
+{% extends 'user_index.html' %}
+{% block sectionRight %}
+
+{% if current_user.idApi %}
+  <h4>Update de la photo  {{ photo_id }}</h4>
+  <form class="" action="" method="post">
+    {{ photoform.hidden_tag() }}
+
+    {{ photoform.title.label(class='form-label') }}
+    {{ photoform.title(class='form-control') }}
+    <br>
+    {{ photoform.url.label(class='form-label') }}
+    {{ photoform.url(class='form-control') }}
+    <br>
+    {{ photoform.thumbnailurl.label(class='form-label') }}
+    {{ photoform.thumbnailurl(class='form-control') }}
+    <br>
+    {{ photoform.addBtn }}
+  </form>
+
+{% else %}
+<h4>Update de la photo  {{ photo_id }}</h4>
+<form class="" action="" method="post">
+  {{ photoform.hidden_tag() }}
+
+  {{ photoform.title.label(class='form-label') }}
+  {{ photoform.title(class='form-control') }}
+  <br>
+  {{ photoform.url.label(class='form-label') }}
+  {{ photoform.url(class='form-control') }}
+  <br>
+  {{ photoform.thumbnailurl.label(class='form-label') }}
+  {{ photoform.thumbnailurl(class='form-control') }}
+  <br>
+  {{ photoform.addBtn }}
+</form>
+{% endif %}
+<br>
+<br><br>
+<br>
+<br>
+<a href="{{ url_for('menuItem', item='albums')}}"><button type="button" name="button">Retour</button></a>
+{% endblock sectionRight %}
