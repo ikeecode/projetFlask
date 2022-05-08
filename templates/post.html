@@ -1,5 +1,8 @@
-{% extends 'user_index.html' %} {% block title %} Post de {{ current_user.name }} {% endblock title %} {% block sectionRight %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}"> {% for message in get_flashed_messages() %}
+{% extends 'user_index.html' %}
+{% block title %} Post de {{ current_user.name }} {% endblock title %}
+{% block sectionRight %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+{% for message in get_flashed_messages() %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
     {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -43,6 +46,7 @@
         </li>
         {% endfor %}
     </ul>
+    <a href="{{ url_for('menuItem', item='post') }}"><button type="button" name="button">Retour</button></a>
     {% endif %} {% endif %}
     <form class="" action="" method="post">
         <input type="submit" name="submit-button" value="charger">
