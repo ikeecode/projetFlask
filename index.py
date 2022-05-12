@@ -11,10 +11,12 @@ from models.users import (User, Address, Company, Post, Album, Photo, Todo, Comm
 from forms import *
 import requests
 from random import choice
+import json
+
 
 # from models.users import app, db
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # app.config['GOOGLEMAPS_KEY'] = 'AIzaSyCi1YySTBjwmSZ3BmmgIRYs-rHcgC0-zCY'
@@ -73,6 +75,28 @@ def randomPassword():
 #     return render_template('example.html', mymap=mymap, sndmap=sndmap)
 
 
+@app.route('/dashboard')
+def dashboard():
+    users = User.query.all()
+    users = [user for user in users if not user.archive]
+    data = []
+    xdeleted = 0
+    xposts   = 0
+
+    for user in users:
+        deleted = len(list(filter(lambda x : x.archive, user.posts)))
+        posts = len(list(filter(lambda x : not x.archive, user.posts)))
+        data.append({
+            'name' : user.username,
+            'posts' : posts,
+            'deleted' : deleted
+        })
+        xdeleted += deleted
+        xposts   += posts
+    with open('./static/resources/posts_data.json', 'w') as file:
+        json.dump(data, file, indent=6)
+
+    return render_template('dashboard.html', users=users, xposts=xposts, xdeleted=xdeleted)
 
 # la page principale
 @app.route('/', methods=['GET', 'POST'])
@@ -204,7 +228,11 @@ def menuItem(item):
     elif item == 'post':
         # chargerPost = Charger()
         current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().posts
+        # current_user_items  += User.query.filter_by(id=current_user.id).first().posts
+
         current_user_items  = [item for item in current_user_items if item.archive==False]
+        print(current_user_items)
+
 
         itemLength = len(current_user_items)
         if request.method == 'POST':
@@ -776,6 +804,7 @@ def ajouterPost():
             title  = postform.title.data,
             body   = postform.body.data
         )
+        print(post_instance)
         db.session.add(post_instance)
         try:
             db.session.commit()
@@ -895,6 +924,7 @@ def ajouter_user():
 
             user = User(
                 name      = formUser.nameUser.data,
+                idApi     = userAddressId.id,
                 fromApi   = False,
                 username  = formUser.username.data,
                 email     = formUser.email.data,

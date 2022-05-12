@@ -26,6 +26,7 @@ ul#postholder li {
     margin: 15px 5px;
     display: flex;
     justify-content: space-between;
+    overflow: hidden;
 }
 
 li a,

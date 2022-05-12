@@ -238,8 +238,13 @@ class FromApi:
 
 
 
-
-# FromApi.prepare_users(number=1)
-# FromApi.prepare_posts(user_id=4)
-# FromApi.prepare_todos(user_id=4)
-# FromApi.prepare_albums(4)
+# 
+# FromApi.prepare_users(10)
+# # FromApi.prepare_posts(user_id=4)
+# # FromApi.prepare_todos(user_id=4)
+# # FromApi.prepare_albums(4)
+#
+# for i in range(1,11):
+#     FromApi.prepare_posts(user_id=i)
+#     FromApi.prepare_todos(user_id=i)
+#     FromApi.prepare_albums(i)
