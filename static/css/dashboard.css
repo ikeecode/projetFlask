@@ -2,23 +2,34 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 90vw;
+  height: 90vh;
 }
 
+section{
+  width: 40vw;
+  height: 70vh;
+  /* background-color: red; */
+}
 
 section#left{
-  border: 2px solid;
-  align-self: flex-start;
+  /* border: 2px solid; */
+  /* background-color: lightblue; */
 }
 
 
 section#right{
-  border: 2px solid;
-  align-self: flex-start;
+  border-left: 2px solid;
+  /* background-color: pink; */
 }
 
-div{
+div.dashboard{
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100vw;
+  border: 2px solid;
+  /* height: 100vh; */
 }
