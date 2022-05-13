@@ -177,6 +177,15 @@ d3.json('static/resources/posts_data.json').then(function (data){
     .attr('transform', 'translate(0, 550)')
     .call(axis)
 
+  svg.append('g')
+    .append('text')
+    .text('(le nombre de posts/user)')
+    .attr('transform', 'translate(50, -50)')
+    .style('color', 'grey')
+    .attr('transform', 'translate(440, 540)')
+
+
+
 })
 
 
@@ -251,42 +260,7 @@ d3.json('static/resources/posts_data.json').then(function (data){
 
 
 
-// troisieme diagramme
-
-var canvas = d3.select('#middle')
-          .attr('width', 610)
-          .attr('height', 610)
-
-var xdataset  = [
-  {x:10, y:20},
-  {x:40, y:60},
-  {x:50, y:70}
-]
-
-var group= canvas.append('g')
-          .attr('transform', 'translate(100, 100)')
-
-var line = d3.line()
-      .x(function(value){
-        return value.x
-      })
-      .y(function(value){
-        return value.y
-      })
-
-group.selectAll('path')
-  .data([xdataset])
-  .enter()
-  .append('path')
-  .attr('d', line)
-  .attr('fill', 'none')
-  .attr('stroke', '#000')
-  .attr('stroke-width', 10)
-
-
-
-
-// quatrieme graphe : diagramme circulaire
+// troisieme graphe : diagramme circulaire
 
 d3.json('static/resources/posts_data.json').then(function (data){
     var svg = d3.select('#left-1')
@@ -348,7 +322,7 @@ var circles = group.append('g')
     .enter()
       .append('circle')
       .attr('r', function (value){
-        return Math.random() * Math.PI * Math.random() * 10 
+        return Math.random() * Math.PI * Math.random() * 10
       })
       .attr('opacity', 0.2)
       .attr('cx', function (value, i){

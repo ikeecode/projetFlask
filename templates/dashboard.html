@@ -12,16 +12,23 @@
     <h3>Posts: {{ xposts }}</h3>
     <h3>Deleted: {{ xdeleted }}</h3>
     <div class="dashboard">
-      <section id='left'>
-      </section>
-      <section id='right'>
-      </section>
-    </div>
-    <div class="dashboard">
-      <section id='left-1'>
-      </section>
-      <section id='right-1'>
-      </section>
+      <div class="dashboard-item">
+        <h5>Nombre de post / user </h5>
+        <section id='left'>
+        </section>
+      </div>
+      <div class="dashboard-item">
+        <h5>Nombre de post / user </h5>
+        <section id='left-1'>
+        </section>
+      </div>
+      <div class="dashboard-item">
+        <h5>Nombre de post / user </h5>
+        <section id='right-1'>
+        </section>
+      </div>
+      <!-- <section id='right'>
+      </section> -->
     </div>
   </body>
   <script src="{{ url_for('static', filename='js/dashboard.js') }}" charset="utf-8"></script>
