@@ -151,7 +151,7 @@ d3.json('static/resources/posts_data.json').then(function (data){
 
 
   bars.transition()
-    .delay(100)
+    .delay(500)
     .duration(4000)
     .attr('width', function (value){
         return widthScale(value.posts)
@@ -243,7 +243,7 @@ d3.json('static/resources/posts_data.json').then(function (data){
 
 
       barChart.transition()
-        .delay(1000)
+        .delay(500)
         .duration(4000)
         .attr('height', function(value){
           return value.posts * 100
@@ -300,7 +300,7 @@ d3.json('static/resources/posts_data.json').then(function (data){
 
 // cercles
 
-d3.json('static/resources/posts_data.json').then(function (data){
+d3.json('static/resources/comments_per_posts.json').then(function (data){
   var svg = d3.select('#right-1')
             .append('svg')
             .attr('width', 640)
@@ -335,7 +335,7 @@ var circles = group.append('g')
       //   return Math.random() * 100
       // })
       .attr('fill', function(value){
-        return colorScale1(value.posts *5)
+        return colorScale1(value.comments *5)
       })
       .attr('stroke', 'black')
       .attr('transform', function(value, i){
@@ -347,9 +347,9 @@ var circles = group.append('g')
 
 circles.transition()
   .delay(300)
-  .duration(4000)
+  .duration(7000)
   .attr('r', function (value){
-    return value.posts * 2.5
+    return value.comments * 10
   })
   .attr('opacity', 0.5)
   .attr('cx', function (value, i){
@@ -367,6 +367,7 @@ circles.transition()
 
 
       group.append('line')
+          // .attr('transform', 'translate(300, 10)')
           .attr('x1', 250)
           .attr('y1', 10)
           .attr('x2', 250)

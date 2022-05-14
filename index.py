@@ -76,7 +76,10 @@ def randomPassword():
 
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
+
+    # chercher le nombre de post / Utilisateur
     users = User.query.all()
     users = [user for user in users if not user.archive]
     data = []
@@ -94,6 +97,21 @@ def dashboard():
         xdeleted += deleted
         xposts   += posts
     with open('./static/resources/posts_data.json', 'w') as file:
+        json.dump(data, file, indent=6)
+
+    # chercher le nombre de commentaires par posts
+    data = []
+    comments = 0
+    posts = Post.query.filter_by(userId = current_user.idApi).all()
+    posts = [item for item in posts if not item.archive ]
+    for post in posts:
+        comments = len(list(filter(lambda x : not x.archive, post.comments )))
+        data.append({
+            'post_id' : post.id,
+            'comments' : comments
+        })
+
+    with open('./static/resources/comments_per_posts.json', 'w') as file:
         json.dump(data, file, indent=6)
 
     return render_template('dashboard.html', users=users, xposts=xposts, xdeleted=xdeleted)
