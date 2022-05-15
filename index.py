@@ -12,9 +12,19 @@ from forms import *
 import requests
 from random import choice
 import json
+# from flask_restful import Api, Resource
+# from api_resources import *
+
+
+
+
+
 
 # from models.users import app, db
 app = Flask(__name__)
+# init the api
+# api = Api(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
@@ -43,6 +53,14 @@ def randomPassword():
         password += ascii_letters[randint(0, 26)]
 
     return password
+
+
+
+# """
+# API STUFF
+# """
+# api.add_resource(Users, '/kabafrom')
+
 #
 # @app.route("/map/")
 # def mapview():
@@ -74,6 +92,11 @@ def randomPassword():
 #     )
 #     return render_template('example.html', mymap=mymap, sndmap=sndmap)
 
+# class HelloWorld(Resource):
+#     def get(self):
+#         return {'data' : 'hello Kaba !'}
+#
+# api.add_resource(HelloWorld, '/kaba')
 
 @app.route('/dashboard')
 @login_required
