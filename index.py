@@ -12,12 +12,28 @@ from models.users import (User, Address, Company, Post, Album, Photo, Todo, Comm
 from forms import *
 import requests
 from random import choice
+import json
+# from flask_restful import Api, Resource
+# from api_resources import *
+
+
+
+
+
 
 # from models.users import app, db
 app = Flask(__name__)
+<<<<<<< HEAD
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://marieme:marieme@localhost/flasko'
+=======
+# init the api
+# api = Api(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
+>>>>>>> 43b75942c42c93896b46e523bff1d9013be4595d
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+
 # app.config['GOOGLEMAPS_KEY'] = 'AIzaSyCi1YySTBjwmSZ3BmmgIRYs-rHcgC0-zCY'
 
 db.init_app(app)
@@ -42,6 +58,14 @@ def randomPassword():
         password += ascii_letters[randint(0, 26)]
 
     return password
+
+
+
+# """
+# API STUFF
+# """
+# api.add_resource(Users, '/kabafrom')
+
 #
 # @app.route("/map/")
 # def mapview():
@@ -73,7 +97,52 @@ def randomPassword():
 #     )
 #     return render_template('example.html', mymap=mymap, sndmap=sndmap)
 
+# class HelloWorld(Resource):
+#     def get(self):
+#         return {'data' : 'hello Kaba !'}
+#
+# api.add_resource(HelloWorld, '/kaba')
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+
+    # chercher le nombre de post / Utilisateur
+    users = User.query.all()
+    users = [user for user in users if not user.archive]
+    data = []
+    xdeleted = 0
+    xposts   = 0
+
+    for user in users:
+        deleted = len(list(filter(lambda x : x.archive, user.posts)))
+        posts = len(list(filter(lambda x : not x.archive, user.posts)))
+        data.append({
+            'name' : user.username,
+            'posts' : posts,
+            'deleted' : deleted
+        })
+        xdeleted += deleted
+        xposts   += posts
+    with open('./static/resources/posts_data.json', 'w') as file:
+        json.dump(data, file, indent=6)
+
+    # chercher le nombre de commentaires par posts
+    data = []
+    comments = 0
+    posts = Post.query.filter_by(userId = current_user.idApi).all()
+    posts = [item for item in posts if not item.archive ]
+    for post in posts:
+        comments = len(list(filter(lambda x : not x.archive, post.comments )))
+        data.append({
+            'post_id' : post.id,
+            'comments' : comments
+        })
+
+    with open('./static/resources/comments_per_posts.json', 'w') as file:
+        json.dump(data, file, indent=6)
+
+    return render_template('dashboard.html', users=users, xposts=xposts, xdeleted=xdeleted)
 
 # la page principale
 @app.route('/', methods=['GET', 'POST'])
@@ -205,7 +274,11 @@ def menuItem(item):
     elif item == 'post':
         # chargerPost = Charger()
         current_user_items  = User.query.filter_by(idApi=current_user.idApi).first().posts
+        # current_user_items  += User.query.filter_by(id=current_user.id).first().posts
+
         current_user_items  = [item for item in current_user_items if item.archive==False]
+        print(current_user_items)
+
 
         itemLength = len(current_user_items)
         if request.method == 'POST':
@@ -777,6 +850,7 @@ def ajouterPost():
             title  = postform.title.data,
             body   = postform.body.data
         )
+        print(post_instance)
         db.session.add(post_instance)
         try:
             db.session.commit()
@@ -895,6 +969,7 @@ def ajouter_user():
 
             user = User(
                 name      = formUser.nameUser.data,
+                idApi     = userAddressId.id,
                 fromApi   = False,
                 username  = formUser.username.data,
                 email     = formUser.email.data,
@@ -919,6 +994,325 @@ def ajouter_user():
                             formAddress=formAddress,
                             formCompany=formCompany,
                             )
+
+
+
+"""
+############################################################################
+LES ROUTES DE NOTRE API
+###########################################################################
+"""
+# afficher tous les infos sur les users
+@app.route('/groupe1/users', methods=['GET'])
+def users():
+    data = dict()
+    users =  User.query.all()
+    for user in users:
+        user_address = Address.query.filter_by(id=user.addressId).first()
+        user_company = Company.query.filter_by(id=user.companyId).first()
+        data.setdefault(user.id, {
+            'name': user.name,
+            'username': user.username,
+            'email': user.email,
+            'phone': user.phone,
+            'website': user.website,
+            'password': user.password,
+            'address' : {
+                'street' : user_address.street,
+                'suite' : user_address.suite,
+                'city' : user_address.city,
+                'zipcode' : user_address.zipcode,
+                'lat' : user_address.lat,
+                'lng' : user_address.lng,
+            },
+            'company' : {
+                'name' : user_company.name,
+                'catchPhrase' : user_company.catchPhrase,
+                'bs' : user_company.bs,
+            }
+        })
+    return data
+
+# info d'un users
+@app.route('/groupe1/users/<int:user_id>', methods=['GET'])
+def user(user_id):
+    data = dict()
+    user =  User.query.filter_by(id = user_id).first()
+    user_address = Address.query.filter_by(id=user.addressId).first()
+    user_company = Company.query.filter_by(id=user.companyId).first()
+    data = {
+        'userId' : user.id,
+        'name': user.name,
+        'username': user.username,
+        'email': user.email,
+        'phone': user.phone,
+        'website': user.website,
+        'password': user.password,
+        'address' : {
+            'street' : user_address.street,
+            'suite' : user_address.suite,
+            'city' : user_address.city,
+            'zipcode' : user_address.zipcode,
+            'lat' : user_address.lat,
+            'lng' : user_address.lng,
+        },
+        'company' : {
+            'name' : user_company.name,
+            'catchPhrase' : user_company.catchPhrase,
+            'bs' : user_company.bs,
+        }
+    }
+
+    return data
+
+
+
+# albums d'un user
+@app.route('/groupe1/users/<int:user_id>/albums', methods=['GET'])
+def user_albums(user_id):
+    data = dict()
+    albums = User.query.get_or_404(user_id).albums
+    for album in albums:
+        data.setdefault(album.id, {
+            'userId' : album.userId,
+            'title' : album.title,
+        })
+
+    return data
+
+
+# todos d'un user
+@app.route('/groupe1/users/<int:user_id>/todos', methods=['GET'])
+def user_todos(user_id):
+    data = dict()
+    todos = User.query.get_or_404(user_id).todos
+    for todo in todos:
+        data.setdefault(todo.id, {
+            'userId' : todo.userId,
+            'title' : todo.title,
+            'completed' : todo.completed,
+        })
+
+    return data
+
+# posts d'un user
+@app.route('/groupe1/users/<int:user_id>/posts', methods=['GET'])
+def user_posts(user_id):
+    data = dict()
+    posts = User.query.get_or_404(user_id).posts
+    for posts in posts:
+        data.setdefault(
+            posts.id,
+                {
+                'userId' : posts.userId,
+                'title' : posts.title,
+                'body' : posts.body,
+                }
+        )
+
+    return data
+
+
+
+# tous les albums
+@app.route('/groupe1/albums', methods=['GET'])
+def albums():
+    data = dict()
+    albums = Album.query.all()
+    for album in albums:
+        data.setdefault(album.id, {
+            'userId' : album.userId,
+            'title' : album.title,
+        })
+
+    return data
+
+
+
+# un album
+@app.route('/groupe1/albums/<int:album_id>', methods=['GET'])
+def album(album_id):
+    data = dict()
+    album = Album.query.get_or_404(album_id)
+    data = {
+        'id' : album.id,
+        'userId' : album.userId,
+        'title' : album.title,
+    }
+
+    return data
+
+
+# les photos d'un album
+@app.route('/groupe1/albums/<int:album_id>/photos', methods=['GET'])
+def album_photos(album_id):
+    data = dict()
+    photos = Album.query.get_or_404(album_id).photos
+    for photo in photos:
+        data.setdefault(
+            photo.id, {
+                'albumId' : album_id,
+                'title' : photo.title,
+                'url' : photo.url,
+                'thumbnailurl' : photo.thumbnailurl,
+            }
+        )
+
+    return data
+
+# tous les photos
+@app.route('/groupe1/photos/', methods=['GET'])
+def photos():
+    data = dict()
+    photos = Photo.query.all()
+    for photo in photos:
+        data.setdefault(
+            photo.id, {
+                'albumId' : photo.albumId,
+                'title' : photo.title,
+                'url' : photo.url,
+                'thumbnailurl' : photo.thumbnailurl,
+            }
+        )
+
+    return data
+
+
+# une photo
+@app.route('/groupe1/photos/<int:photo_id>', methods=['GET'])
+def photo(photo_id):
+    data = dict()
+    photo = Photo.query.get_or_404(photo_id)
+    data = {
+            'id' : photo.id,
+            'albumId' : photo.albumId,
+            'title' : photo.title,
+            'url' : photo.url,
+            'thumbnailurl' : photo.thumbnailurl,
+        }
+
+    return data
+
+
+# tous les todos
+@app.route('/groupe1/todos', methods=['GET'])
+def todos():
+    data = dict()
+    todos = Todo.query.all()
+    for todo in todos:
+        data.setdefault(
+            todo.id,
+                {
+                    'userId' : todo.userId,
+                    'title' : todo.title,
+                    'completed' : todo.completed,
+                }
+        )
+
+    return data
+
+
+# un todo
+@app.route('/groupe1/todos/<int:todo_id>', methods=['GET'])
+def todo(todo_id):
+    data = dict()
+    todo = Todo.query.get_or_404(todo_id)
+    data = {
+            'id' : todo.id,
+            'userId' : todo.userId,
+            'title' : todo.title,
+            'completed' : todo.completed,
+            }
+
+    return data
+
+# tous les posts
+@app.route('/groupe1/posts', methods=['GET'])
+def posts():
+    data = dict()
+    posts = Post.query.all()
+    for post in posts:
+        data.setdefault(
+            post.id,
+                {
+                    'userId' : post.userId,
+                    'title' : post.title,
+                    'body' : post.body,
+                }
+        )
+
+    return data
+
+
+
+# un post
+@app.route('/groupe1/posts/<int:post_id>', methods=['GET'])
+def post(post_id):
+    data = dict()
+    post = Post.query.get_or_404(post_id)
+    data = {
+            'id' : post.id,
+            'userId' : post.userId,
+            'title' : post.title,
+            'body' : post.body,
+            }
+
+    return data
+
+
+# comment d'un post
+@app.route('/groupe1/posts/<int:post_id>/comments', methods=['GET'])
+def post_comments(post_id):
+    data = dict()
+    comments = Post.query.get_or_404(post_id).comments
+    for comment in comments:
+        data.setdefault(
+            comment.id,
+                {
+                    'postId' : post_id,
+                    'name' : comment.name,
+                    'email' : comment.email,
+                    'body' : comment.body,
+                }
+        )
+
+    return data
+
+
+# tous les comments
+@app.route('/groupe1/comments', methods=['GET'])
+def comments():
+    data = dict()
+    comments = Comment.query.all()
+    for comment in comments:
+        data.setdefault(
+            comment.id,
+                {
+                    'postId' : comment.postId,
+                    'name' : comment.name,
+                    'email' : comment.email,
+                    'body' : comment.body,
+                }
+        )
+
+    return data
+
+
+# un comment
+@app.route('/groupe1/comments/<int:comment_id>', methods=['GET'])
+def comment(comment_id):
+    data = dict()
+    comment = Comment.query.get_or_404(comment_id)
+    data = {
+            'id' : comment.id,
+            'postId' : comment.postId,
+            'name' : comment.name,
+            'email' : comment.email,
+            'body' : comment.body,
+    }
+
+    return data
+
 
 
 if __name__=='__main__':

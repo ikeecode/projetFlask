@@ -78,6 +78,27 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 
 input[type=number] {
+<<<<<<< HEAD
     text-align: center;
     -moz-appearance: textfield;
 }
+=======
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+
+button#dashboard{
+  width: 10vw;
+  height: 10vh;
+  border-radius: 10px;
+  font-size: 22px;
+
+}
+
+button#dashboard:hover{
+  background-color: lightBlue;
+  color: white;
+  font-size: 22.5px;
+}
+>>>>>>> 43b75942c42c93896b46e523bff1d9013be4595d
