@@ -1,0 +1,63 @@
+h2 {
+    color: #6d6875;
+}
+
+h4 {
+    color: #b5838d;
+    text-align: center;
+}
+
+#svg1div {
+    width: 800px;
+    height: 500px;
+    margin: 15px 0px;
+    background-color: #ffb4a2;
+    border: 5px solid black;
+}
+
+#svg2div {
+    width: 800px;
+    height: 500px;
+    margin: 15px 0px;
+    background-color: #ffb4a2;
+    border: 5px solid black;
+}
+
+
+/* circle {
+    fill: aqua;
+} */
+
+#svg3div {
+    width: 800px;
+    height: 500px;
+    margin: 15px 0px;
+    background-color: #ffcdb2;
+    border: 5px solid black;
+}
+
+
+/* .container {
+    width: 250px;
+    height: 200px;
+    border: 1px solid #000000;
+} */
+
+
+/* .container {
+    width: 850px;
+    height: 200px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.bar {
+    background-color: #ffb4a2;
+    border: 2px solid #6d6875;
+    margin: 0px 5px;
+} */
+
+
+/* .bar {
+    fill: aquamarine;
+} */

@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, abort
+from crypt import methods
+from flask import Flask, jsonify, render_template, redirect, url_for, request, flash, abort
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
 from folium import Map, Marker
@@ -14,7 +15,7 @@ from random import choice
 
 # from models.users import app, db
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://marieme:marieme@localhost/flasko'
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # app.config['GOOGLEMAPS_KEY'] = 'AIzaSyCi1YySTBjwmSZ3BmmgIRYs-rHcgC0-zCY'
@@ -882,7 +883,6 @@ def ajouter_user():
                 catchPhrase = formCompany.catchPhrase.data,
                 bs          = formCompany.bs.data,
             )
-
             try:
                 db.session.add(userCompany)
                 db.session.commit()

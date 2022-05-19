@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/donnees.css') }}">
+    <script src="{{ url_for('static', filename= 'js/d3/package/dist/d3.js')}}" charset="utf-8"></script>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div id="svg1div"></div>
+    <div id="svg2div"></div>
+    <div id="svg3div"></div>
+</body>
+<script src="{{ url_for('static', filename= 'js/d3/dashboard.js')}}" charset="utf-8"></script>
+
+</html>

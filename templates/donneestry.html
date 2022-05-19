@@ -1,0 +1,60 @@
+{% extends 'base.html'%} {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/donneestry.css') }}">
+<script src="{{ url_for('static', filename= 'js/d3/package/dist/d3.js')}}" charset="utf-8"></script>
+<h2>Visulaisation données Applications</h2>
+<div class="svgcontainer">
+    <h4>Visualiser le nombre de POSTS par utilisateurs</h4>
+    <svg id="svg1"></svg>
+    <hr>
+    <div id="svg1div"></div>
+</div>
+<br>
+<hr>
+<div class="svgcontainer">
+    <h4>Visualiser le nombre de COMMENTS par POSTS</h4>
+    <svg id="svg2"></svg>
+</div>
+<br>
+<hr>
+<div class="svgcontainer">
+    <h4>Visualiser le nombre de ALBUMS par utilisateurs</h4>
+    <svg id="svg3"></svg>
+</div>
+<br>
+<hr>
+<script>
+    var data = [1, 10, 20, 30, 40, 50, 60]
+    var colorScale = d3.scaleLinear().domain(10, 60).range(['red', 'blue'])
+    var svg = d3.select('body')
+        .append('svg')
+        .attr('width', 400)
+        .attr('height', 400)
+        .attr('class', 'title')
+    svg.selectAll('rect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('transform', function(value, i) {
+            var translate = [value * 2, 0]
+            return 'translate (' + translate + ')'
+        })
+        .attr('x', function(value, i) {
+            return value + 20
+        })
+        .attr('y', function(value, i) {
+            return 0
+        })
+        .attr('width', 20)
+        .attr('height', function(value, i) {
+            return value * 5
+        })
+        .attr('fill', function(value, i) {
+            return colorScale(value)
+        })
+    svg.selectAll('rect')
+        .transition()
+        .delay(200)
+        .duration(2000)
+        .attr('fill', '#00afb9')
+</script>
+{% endblock %}
