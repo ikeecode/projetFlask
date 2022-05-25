@@ -61,3 +61,40 @@ python3 index.py
 ```bash
 deactivate
 ```
+### VISUALISATION DES API
+### LES DIFFÉRENTES ENDPOINTS API
+
+### USERS
+
+### /users                GET and POST
+### /users/id             GET and DELETE
+### /users/id/posts       GET and DELETE
+### /users/id/albums      GET and DELETE
+### /users/id/todos       GET and DELETE
+
+### POSTS
+
+### /posts               GET and POST
+### /posts/id            GET, PUT and DELETE
+### /posts/id/comments   GET and DELETE
+
+### COMMENTS
+
+### /comments            GET and POST
+### /comments/id         GET, PUT and DELETE
+
+### TODOS
+
+### /todos               GET and POST
+### /todos/id            GET, PUT and DELETE
+
+### ALBUMS
+
+### /albums              GET and POST
+### /albums/id           GET, PUT and DELETE
+### /albums/id/phots     GET and DELETE
+
+### PHOTOS
+
+### /photos              GET and POST
+### /photos/id           GET, PUT and DELETE

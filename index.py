@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, redirect, url_for, request, flash, abort
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
@@ -10,8 +9,6 @@ from string import ascii_letters
 from fromApi import FromApi as fp
 from models.users import (User, Address, Company, Post, Album, Photo, Todo, Comment, app, db)
 from forms import *
-import requests
-from random import choice
 import json
 from flask_restful import Api, Resource
 # from api_resources import *
@@ -959,7 +956,6 @@ def ajouter_user():
                 catchPhrase = formCompany.catchPhrase.data,
                 bs          = formCompany.bs.data,
             )
-
             try:
                 db.session.add(userCompany)
                 db.session.commit()

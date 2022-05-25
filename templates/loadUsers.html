@@ -1,13 +1,39 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="pageBody">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/loadUsers.css')}}">
-{% for message in get_flashed_messages() %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loadUsers.css')}}"> {% for message in get_flashed_messages() %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+<<<<<<< HEAD
+    {% endfor %}
+    <div class="heading">
+        <button type="button" class="btn  btn-lg"><a href="{{ url_for('ajouter_user') }}">Ajouter User</a></button>
+        <button id="submitBtn" type="button" class="btn  btn-lg"><a href="{{ url_for('chargementUser') }}">Charger User</a></button>
+    </div>
+    <form id="changementUser" class="" action="" method="post">
+        {{ genForm.hidden_tag() }}
+        <!-- {{ genForm.generatorBtn }} -->
+        <br> {{ genForm.numberChosen(class="form-control") }}
+    </form>
+    <div id="archives">
+        <a href="{{ url_for('userArchive') }}"><button type="button" name="button">archives</button></a>
+    </div>
+    {% if myusers %}
+    <br>
+    <table class="table usersDisplayField">
+        <h3>Liste des Users</h3>
+        <thead>
+            <th>id</th>
+            <th>name</th>
+            <th>username</th>
+            <th>email</th>
+            <th>website</th>
+            <th></th>
+        </thead>
+        {% for i in range(number) if i
+        < 5 %} <tr>
+=======
 {% endfor %}
 <div class="heading">
   <button type="button" class="btn  btn-lg"><a href="{{ url_for('ajouter_user') }}">Ajouter User</a></button>
@@ -39,57 +65,51 @@
     </thead>
       {% for i in range(number) if i < 5 %}
           <tr>
+>>>>>>> 43b75942c42c93896b46e523bff1d9013be4595d
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].id }}</a></td>
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].name }}</a></td>
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].username }}</a></td>
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].email }}</a></td>
             <td><a href="{{ url_for('logIn', email=myusers[i].email) }}">{{ myusers[i].website }}</a></td>
             <td><a class="deleteBtn" href="{{ url_for('deleteUser', user_id=myusers[i].id) }}">Delete</a></td>
-          </tr>
-      {% endfor %}
-      {% if number > 5 %}
-          {% for n in range(5, number) if n < userLength%}
-              <tr class="cible surPlus">
+            </tr>
+            {% endfor %} {% if number > 5 %} {% for n in range(5, number) if n
+            < userLength%} <tr class="cible surPlus">
                 <td><a href="{{ url_for('logIn', email=myusers[n].email) }}">{{ myusers[n].id }}</a></td>
                 <td><a href="{{ url_for('logIn', email=myusers[n].email) }}">{{ myusers[n].name }}</a></td>
                 <td><a href="{{ url_for('logIn', email=myusers[n].email) }}">{{ myusers[n].username }}</a></td>
                 <td><a href="{{ url_for('logIn', email=myusers[n].email) }}">{{ myusers[n].email }}</a></td>
                 <td><a href="{{ url_for('logIn', email=myusers[n].email) }}">{{ myusers[n].website }}</a></td>
                 <td><a class="deleteBtn" href="{{ url_for('deleteUser', user_id=myusers[n].id) }}">Delete</a></td>
-              </tr>
-          {% endfor %}
-      </table>
-      <div class="plus">
+                </tr>
+                {% endfor %}
+    </table>
+    <div class="plus">
         <button id="voirPlus" type="button" name="button"> voir plus </button>
-      </div>
-      {% endif %}
-    {% else %}
-    {% if current_user_items_from_archive %}
-        <table class="table usersDisplayField" >
-          <h3>Archives des Users</h3>
-          <thead>
+    </div>
+    {% endif %} {% else %} {% if current_user_items_from_archive %}
+    <table class="table usersDisplayField">
+        <h3>Archives des Users</h3>
+        <thead>
             <th>id</th>
             <th>name</th>
             <th>username</th>
             <th>email</th>
             <th>website</th>
             <th></th>
-          </thead>
-          {% for n in range(itemLength) %}
-              <tr>
-                <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].id }}</a></td>
-                <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].name }}</a></td>
-                <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].username }}</a></td>
-                <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].email }}</a></td>
-                <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].website }}</a></td>
-                <td><a class="reprendreBtn" href="{{ url_for('deleteUser', user_id=current_user_items_from_archive[n].id) }}">Reprendre</a></td>
-              </tr>
-          {% endfor %}
-        </table>
-        <a href="{{ url_for('chargementUser') }}"><button type="button" name="button">Retour</button></a>
-    {% endif %}
-
-  {% endif %}
-  <script src="{{ url_for('static', filename= 'js/loadUsers.js')}}" charset="utf-8"></script>
+        </thead>
+        {% for n in range(itemLength) %}
+        <tr>
+            <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].id }}</a></td>
+            <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].name }}</a></td>
+            <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].username }}</a></td>
+            <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].email }}</a></td>
+            <td><a href="{{ url_for('logIn', email=current_user_items_from_archive[n].email) }}">{{ current_user_items_from_archive[n].website }}</a></td>
+            <td><a class="reprendreBtn" href="{{ url_for('deleteUser', user_id=current_user_items_from_archive[n].id) }}">Reprendre</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('chargementUser') }}"><button type="button" name="button">Retour</button></a> {% endif %} {% endif %}
+    <script src="{{ url_for('static', filename= 'js/loadUsers.js')}}" charset="utf-8"></script>
 </div>
 {% endblock %}

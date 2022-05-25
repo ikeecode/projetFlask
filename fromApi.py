@@ -238,6 +238,11 @@ class FromApi:
 
 
 
+<<<<<<< HEAD
+
+# FromApi.prepare_users(number=10)
+# for i in range(1,10):
+=======
 # 
 # FromApi.prepare_users(10)
 # # FromApi.prepare_posts(user_id=4)
@@ -245,6 +250,7 @@ class FromApi:
 # # FromApi.prepare_albums(4)
 #
 # for i in range(1,11):
+>>>>>>> 43b75942c42c93896b46e523bff1d9013be4595d
 #     FromApi.prepare_posts(user_id=i)
 #     FromApi.prepare_todos(user_id=i)
 #     FromApi.prepare_albums(i)
