@@ -96,6 +96,7 @@ def apiUsers():
         db.session.add(company_add)
         db.session.commit()
         user_add = User(
+                        id        = getId(User),
                         name      =dictApi.get("name"),
                         username  =dictApi.get("username"),
                         email     =dictApi.get("email"),
@@ -184,7 +185,7 @@ def apiPosts():
                     )
         db.session.add(post_add)
         db.session.commit()
-        return  jsonify({'POS OK':dictApi})
+        return  jsonify({'POST OK':dictApi})
     else:
         return 'ERROR'
 
@@ -246,12 +247,12 @@ def apiPostComments(post_id):
     else:
         return "ERROR"
 
-@app.route('/api/posts/<int:post_id>/albums', methods=['GET','DELETE'])
-def apiPostAlbums(post_id):
+@app.route('/api/user/<int:user_id>/albums', methods=['GET','DELETE'])
+def apiPostAlbums(user_id):
     dictApi = []
     if request.method=='GET':
-        Posts = Post.query.filter_by(id=post_id).first()
-        for album in list(Posts.albums):
+        Users = User.query.filter_by(id=user_id).first()
+        for album in list(Users.albums):
             dictApi.append({
                 "userId" : album.userId,
                 "id"     : album.id,
@@ -259,7 +260,7 @@ def apiPostAlbums(post_id):
             })
         return  jsonify(dictApi)
     elif request.method=='DELETE':
-        Albums = Album.query.filter_by(postId=post_id)
+        Albums = Album.query.filter_by(userId=user_id)
         for album in Albums:
             album.archive=False
         return  "DELETED"
@@ -269,22 +270,23 @@ def apiPostAlbums(post_id):
 
 
 
-@app.route('/api/posts/<int:post_id>/todos', methods=['GET','DELETE'])
+@app.route('/api/user/<int:post_id>/todos', methods=['GET','DELETE'])
 def apiPostTodos(post_id):
     dictApi = []
     if request.method=='GET':
         Posts = Post.query.filter_by(id=post_id).first()
-        for todos in list(Posts.albums):
+        for todos in list(Posts.todos):
             dictApi.append({
                 "userId" : todos.userId,
                 "id"     : todos.id,
-                "title"  : todos.title
+                "title"  : todos.title,
+                "completed":todos.completed
             })
         return  jsonify(dictApi)
     elif request.method=='DELETE':
-        todos = Comment.query.filter_by(postId=post_id)
-        for album in Albums:
-            album.archive=False
+        todos = Todo.query.filter_by(postId=post_id)
+        for todo in todos:
+            todo.archive=False
         return  "DELETED"
     else:
         return "ERROR"
@@ -544,6 +546,88 @@ def apiPhotoId(photo_id):
 
 
 
+
+# @app.route('/api/users/m/<int:user_id>', methods=['GET','POST'])
+# def apiUserrId(user_id):
+#     if request.method=='GET':
+#         dictApi ={}
+#         user = User.query.filter_by(id=user_id).first()
+#         Addresses = (User.query.filter_by(id=user_id).first()).address
+#         Companies = (User.query.filter_by(id=user_id).first()).company
+#         dictApi={
+#             "id": user.idApi,
+#             "name": user.name,
+#             "username": user.username,
+#             "email": user.email,
+#             "address": {
+#             "street": Addresses.street,
+#             "suite": Addresses.suite,
+#             "city": Addresses.city,
+#             "zipcode": Addresses.zipcode,
+#             "geo": {
+#                 "lat": Addresses.lat,
+#                 "lng": Addresses.lng
+#             }
+#             },
+#             "phone": user.phone,
+#             "website": user.website,
+#             "company": {
+#             "name": Companies.name,
+#             "catchPhrase": Companies.catchPhrase,
+#             "bs": Companies.bs
+#             }
+#         }
+
+#         return jsonify(dictApi)
+#     elif request.method=='PUT':
+#         addressJson = geoJson = companyJson = {}
+#         user = User.query.filter_by(id=user_id).first()
+#         company = (User.query.filter_by(id=user_id).first()).company
+#         address = (User.query.filter_by(id=user_id).first()).address
+#         print(user)
+#         req = request.get_json()
+#         print(req)
+#         addressJson = req["address"]
+#         print("ADRESSE : ",addressJson)
+#         geoJson     = addressJson["geo"]
+#         print("GEO : ",geoJson)
+#         companyJson = req["company"]
+#         # company.bs          = companyJson.get("bs")
+#         # company.catchPhrase = companyJson.get("catchPhrase")
+#         # company.name        = companyJson.get("name")
+
+#         # address.city        = addressJson.get("city")
+#         # address.geo         = addressJson.get("geo")
+#         # address.lat         = geoJson.get("lat")
+#         # address.lng         = geoJson.get("lng")
+#         # address.street      = addressJson.get("street")
+#         # address.suite       = addressJson.get("suite")
+#         # address.zipcode     = addressJson.get("zipcode")
+        
+#         # user.name           = req.get("name")
+#         # user.username       = req.get("username")
+#         # user.phone          = req.get("phone")
+#         # user.website        = req.get("website")
+#         # user.email          = req.get("email")
+#         # db.session.commit()
+#         return  jsonify({"PUT OK":req})
+#     #DELETE A POST BY ID
+#     elif request.method=='DELETE':  
+#         user = User.query.filter_by(id=user_id).first()
+#         user.archive = False
+#         db.session.commit()
+#         return  jsonify({"DELETE OK"})    
+#     else:
+#         return "ERROR"
+
+@app.route('/', methods=['GET','PUT','DELETE'])
+def apis():
+    # if request.method=='GET':
+    return render_template('api.html')
+
+
+
+
 if __name__=='__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5004)
 
