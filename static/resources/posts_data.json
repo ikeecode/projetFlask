@@ -1,10 +1,5 @@
 [
       {
-            "name": "Maxime_Nienow",
-            "posts": 10,
-            "deleted": 0
-      },
-      {
             "name": "Delphine",
             "posts": 10,
             "deleted": 0
@@ -31,7 +26,7 @@
       },
       {
             "name": "Bret",
-            "posts": 12,
+            "posts": 13,
             "deleted": 1
       },
       {
@@ -48,5 +43,10 @@
             "name": "antalastar",
             "posts": 15,
             "deleted": 1
+      },
+      {
+            "name": "Maxime_Nienow",
+            "posts": 6,
+            "deleted": 4
       }
 ]

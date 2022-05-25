@@ -261,40 +261,95 @@ d3.json('static/resources/posts_data.json').then(function (data){
 
 
 // troisieme graphe : diagramme circulaire
+//
+// d3.json('static/resources/posts_data.json').then(function (data){
+//     var svg = d3.select('')
+//               .append('svg')
+//               .attr('width', 610)
+//               .attr('height', 610)
+//
+//     var group = svg.append('g')
+//                 .attr('transform', 'translate(305, 305)')
+//
+//     var xdata = new Array()
+//     var names = new Array()
+//
+//     data.forEach((item) => {
+//       xdata.push(item.posts)
+//       names.push(item.name)
+//     })
+//
+//     var pie = d3.pie()
+//     var arcs = pie(xdata)
+//     // console.log(arcs)
+//
+//     var archer = d3.arc()
+//         .innerRadius(20)
+//         .outerRadius(230)
+//
+//
+//   group.selectAll('path')
+//       .data(arcs)
+//       .enter()
+//         .append('path')
+//         .attr('d', archer)
+//         .attr('fill', 'pink')
+//         .attr('stroke', 'white')
+// })
 
-d3.json('static/resources/posts_data.json').then(function (data){
-    var svg = d3.select('#left-1')
-              .append('svg')
-              .attr('width', 610)
-              .attr('height', 610)
+d3.json('static/resources/comments_per_posts.json').then(function(data){
+  var svgWidth = 610, svgHeight = 610, radius = Math.min(svgWidth, svgHeight) /2 - 50
+  var svg = d3.select('#left-1')
+    .append('svg')
+    .attr('width', svgWidth)
+    .attr('height', svgHeight)
 
-    var group = svg.append('g')
-                .attr('transform', 'translate(305, 305)')
 
-    var xdata = new Array()
-    var names = new Array()
 
-    data.forEach((item) => {
-      xdata.push(item.posts)
-      names.push(item.name)
+  var g = svg.append('g')
+      .attr('transform', 'translate(305, 305)')
+      // .attr('transform', `translate('${radius}, ${radius}')`)
+
+  var color = d3.scaleOrdinal(d3.schemeCategory10)
+
+  var pie = d3.pie().value(function(d){
+    return d.comments
+  })
+
+  var path = d3.arc()
+      .outerRadius(radius)
+      .innerRadius(70)
+
+  var path1 = d3.arc()
+          .outerRadius(radius)
+          .innerRadius(30)
+
+  var arc = g.selectAll('arc')
+    .data(pie(data))
+    .enter()
+    .append('g')
+
+  path2 = 'M60,-100A1,1,0,0,1,3,8'
+  arc.append('path')
+    .attr('d', path)
+    .attr('fill', function(d){
+      return color(d.data.comments * Math.random() * 10)
     })
+    .attr('stroke', 'white')
+    .attr('stroke-width', 25)
+    .append('animateMotion')
+    .attr('dur', '5s')
+    .attr('repeatCount', '1')
+    .attr('path', path2)
 
-    var pie = d3.pie()
-    var arcs = pie(xdata)
-    // console.log(arcs)
+  arc.selectAll('path')
+    .transition()
+    .delay(500)
+    .duration(7000)
+    .attr('d', path1)
+    .attr('stroke-width', 3)
 
-    var archer = d3.arc()
-        .innerRadius(20)
-        .outerRadius(230)
 
-
-  group.selectAll('path')
-      .data(arcs)
-      .enter()
-        .append('path')
-        .attr('d', archer)
-        .attr('fill', 'pink')
-        .attr('stroke', 'white')
 })
 
 

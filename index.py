@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, redirect, url_for, request, flash, abort
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
@@ -12,7 +13,7 @@ from forms import *
 import requests
 from random import choice
 import json
-# from flask_restful import Api, Resource
+from flask_restful import Api, Resource
 # from api_resources import *
 
 
@@ -23,7 +24,7 @@ import json
 # from models.users import app, db
 app = Flask(__name__)
 # init the api
-# api = Api(app)
+api = Api(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
@@ -59,7 +60,13 @@ def randomPassword():
 # """
 # API STUFF
 # """
-# api.add_resource(Users, '/kabafrom')
+
+# class HelloWorld(Resource):
+#     def get(self):
+#         return {'ousseynou':'is a fool'}
+#
+#
+# api.add_resource(HelloWorld, '/kabafrom')
 
 #
 # @app.route("/map/")
@@ -592,7 +599,7 @@ def deletePhoto(photo_id):
 @app.route('/post/<int:post_id>/comments')
 @login_required
 def afficheComments(post_id):
-    current_user_items = Post.query.filter_by(idApi=post_id).first().comments
+    current_user_items = Post.query.filter_by(id=post_id).first().comments
     current_user_items = [item for item in current_user_items if not item.archive]
     itemLength = len(current_user_items)
 
@@ -999,7 +1006,7 @@ LES ROUTES DE NOTRE API
 ###########################################################################
 """
 # afficher tous les infos sur les users
-@app.route('/groupe1/users', methods=['GET'])
+@app.route('/groupe1/users/', methods=['GET'])
 def users():
     data = dict()
     users =  User.query.all()
