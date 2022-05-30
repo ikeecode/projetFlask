@@ -153,16 +153,77 @@ def apiUserId(user_id):
             "bs": Companies.bs
             }
         }
-
+    try:
         return jsonify(dictApi)
-    #DELETE A POST BY ID
-    elif request.method=='DELETE':
-        user = User.query.filter_by(id=user_id).first()
-        user.archive = False
-        db.session.commit()
-        return  jsonify({"DELETE OK"})
-    else:
-        return "ERROR"
+    except:
+        return jsonify({"Error": "Post doesn't work well !"})
+# POST A NEW USER
+@app.route('/api/users', methods=['POST'])
+def apiUsersPost():
+    dictApiCompany = dictApiAddress = dictApiGeo = {}
+    dictApi = request.get_json()
+    dictApiAddress = dictApi["address"]
+    dictApiGeo = dictApiAddress["geo"]
+    address_add = Address(
+                    street   = dictApiAddress.get("street"),
+                    suite    = dictApiAddress.get("suite"),
+                    city     = dictApiAddress.get("city"),
+                    zipcode  = dictApiAddress.get("zipcode"),
+                    lat      = dictApiGeo.get("lat"),
+                    lng      = dictApiGeo.get("lng")
+                )
+    db.session.add(address_add)
+    db.session.commit()
+    dictApiCompany = dictApi["company"]
+    company_add = Company(
+                    name         = dictApiCompany.get("name"),
+                    catchPhrase  = dictApiCompany.get("catchPhrase"),
+                    bs           = dictApiCompany.get("bs")
+                )
+    db.session.add(company_add)
+    db.session.commit()
+    user_add = User(
+                    id        = getId(User),
+                    name      =dictApi.get("name"),
+                    username  =dictApi.get("username"),
+                    email     =dictApi.get("email"),
+                    addressId =(getId(Address)-1),
+                    companyId =(getId(Company)-1),
+                    phone     =dictApi.get("phone"),
+                    website   =dictApi.get("website")
+                )
+    db.session.add(user_add)
+    db.session.commit()
+    try:
+        return  jsonify({'POST OK':dictApi})
+    except:
+        return jsonify({"Error": "Post doesn't work well !"})
+
+# GET ONE USER BY HIS ID
+@app.route('/api/users/<int:user_id>')
+def apiUserIdGet(user_id):
+    dictApi ={}
+    user = User.query.filter_by(id=user_id,archive=False).first()
+    Addresses = (User.query.filter_by(id=user_id,archive=False).first()).address
+    Companies = (User.query.filter_by(id=user_id,archive=False).first()).company
+    dictApi={
+        "id": user.idApi,
+        "name": user.name,
+        "username": user.username,
+        "email": user.email,
+        "address": {
+            "street": Addresses.street,
+            "suite": Addresses.suite,
+            "city": Addresses.city,
+            "zipcode": Addresses.zipcode,
+            "geo": {
+                "lat": Addresses.lat,
+                "lng": Addresses.lng
+            }
+        }
+    }
+    
+    return jsonify(dictApi)
 
 
 """######           POST validate         ######"""
@@ -551,7 +612,36 @@ def apiPhotoId(photo_id):
         }
         photo.archive = True
         db.session.commit()
-        return  jsonify({"DELETE OK":dictApi})
+        return jsonify({"DELETED":data})
+
+
+
+"""
+############################################################################################
+##                                     VIEW API                                           ##
+############################################################################################
+"""
+
+
+
+@app.route('/api_home', methods=['GET','PUT','DELETE'])
+def apis():
+    # if ('user' in session):
+    #     return render_template('api.html', session=session)
+    # else:
+        return render_template('api.html')
+
+@app.route('/')
+def apiConnect():
+    return render_template('apiConnect.html')
+@app.route('/', methods=['POST'])
+def apiConnectPost():
+    email = request.form['email'],
+    password = request.form['password']
+    user = Utilisateur.query.filter_by(email=email[0],password=password).first()
+    if user!=None:
+        # flash('connexion réussie')
+        return redirect(url_for('apis'))
     else:
         return "ERROR"
 
