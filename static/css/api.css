@@ -1,0 +1,37 @@
+/* body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+} */
+
+table {
+    width: 90%;
+    height: 75px;
+    border: 1px solid #000000;
+    margin-top: 15px;
+    text-align: center;
+}
+
+thead {
+    background-color: rgb(198, 198, 198);
+}
+
+td {
+    border: 3px solid #000000;
+    background-color: #f0f8ff;
+}
+
+
+/* tr {
+    background-color: green;
+} */
+
+
+/* th {
+    border: 3px solid blue;
+}
+
+td {
+    border: 3px solid pink;
+} */

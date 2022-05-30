@@ -71,7 +71,7 @@ def apiUsersGet():
             }
         })
     try:
-        return render_template('apiUser.html', dictApi=dictApi)
+        return jsonify(dictApi)
     except:
         return jsonify({"Error": "Post doesn't work well !"})
 # POST A NEW USER
@@ -685,17 +685,17 @@ def apiTodosIdDelete(todos_id):
 
 
 
-@app.route('/', methods=['GET','PUT','DELETE'])
+@app.route('/api_home', methods=['GET','PUT','DELETE'])
 def apis():
     # if ('user' in session):
     #     return render_template('api.html', session=session)
     # else:
         return render_template('api.html')
 
-@app.route('/connect')
+@app.route('/')
 def apiConnect():
     return render_template('apiConnect.html')
-@app.route('/connect', methods=['POST'])
+@app.route('/', methods=['POST'])
 def apiConnectPost():
     email = request.form['email'],
     password = request.form['password']
