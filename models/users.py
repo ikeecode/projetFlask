@@ -4,11 +4,8 @@ from flask_migrate import Migrate
 from flask_login import UserMixin
 
 app = Flask(__name__)
-<<<<<<< HEAD
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://marieme:marieme@localhost/flasko'
-=======
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
->>>>>>> 43b75942c42c93896b46e523bff1d9013be4595d
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 

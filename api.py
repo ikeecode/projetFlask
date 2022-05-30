@@ -2,7 +2,7 @@ from crypt import methods
 from webbrowser import get
 from flask import Flask, jsonify, render_template, redirect, url_for, request, flash, abort
 from numpy import tile
-
+from flask_cors import CORS
 # from flask_googlemaps import GoogleMaps, Map
 
 from fromApi import FromApi as fp
@@ -12,10 +12,12 @@ import requests
 
 # from models.users import app, db
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://marieme:marieme@localhost/flasko'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # app.config['GOOGLEMAPS_KEY'] = 'AIzaSyCi1YySTBjwmSZ3BmmgIRYs-rHcgC0-zCY'
+
+CORS(app)
 
 db.init_app(app)
 
@@ -38,6 +40,16 @@ def getId(User):
 ##                                          API                                           ##
 ############################################################################################
 """
+
+
+@app.route('/api', methods=['GET'])
+def home():
+    return render_template('home.html')
+
+@app.route('/api/', methods=['GET'])
+def homee():
+    return render_template('home.html')
+
 @app.route('/api/users', methods=['GET','POST'])
 def apiUsers():
     Users = User.query
@@ -92,7 +104,7 @@ def apiUsers():
                         name         = dictApiCompany.get("name"),
                         catchPhrase  = dictApiCompany.get("catchPhrase"),
                         bs           = dictApiCompany.get("bs")
-                    ) 
+                    )
         db.session.add(company_add)
         db.session.commit()
         user_add = User(
@@ -144,11 +156,11 @@ def apiUserId(user_id):
 
         return jsonify(dictApi)
     #DELETE A POST BY ID
-    elif request.method=='DELETE':  
+    elif request.method=='DELETE':
         user = User.query.filter_by(id=user_id).first()
         user.archive = False
         db.session.commit()
-        return  jsonify({"DELETE OK"})    
+        return  jsonify({"DELETE OK"})
     else:
         return "ERROR"
 
@@ -211,7 +223,7 @@ def apiPostId(post_id):
         db.session.commit()
         return  jsonify({"PUT OK":req})
     #DELETE A POST BY ID
-    elif request.method=='DELETE':  
+    elif request.method=='DELETE':
         post = Post.query.filter_by(id=post_id).first()
         dictApi = {
             "userId" : post.userId,
@@ -221,7 +233,7 @@ def apiPostId(post_id):
         }
         post.archive = False
         db.session.commit()
-        return  jsonify({"DELETE OK":dictApi})    
+        return  jsonify({"DELETE OK":dictApi})
     else:
         return "ERROR"
 
@@ -268,26 +280,27 @@ def apiPostAlbums(post_id):
 
 
 
+# marieme tu dois vraiment mexpliquer ca
 
-@app.route('/api/posts/<int:post_id>/todos', methods=['GET','DELETE'])
-def apiPostTodos(post_id):
-    dictApi = []
-    if request.method=='GET':
-        Posts = Post.query.filter_by(id=post_id).first()
-        for todos in list(Posts.albums):
-            dictApi.append({
-                "userId" : todos.userId,
-                "id"     : todos.id,
-                "title"  : todos.title
-            })
-        return  jsonify(dictApi)
-    elif request.method=='DELETE':
-        todos = Comment.query.filter_by(postId=post_id)
-        for album in Albums:
-            album.archive=False
-        return  "DELETED"
-    else:
-        return "ERROR"
+# @app.route('/api/posts/<int:post_id>/todos', methods=['GET','DELETE'])
+# def apiPostTodos(post_id):
+#     dictApi = []
+#     if request.method=='GET':
+#         Posts = Post.query.filter_by(id=post_id).first()
+#         for todos in list(Posts.albums):
+#             dictApi.append({
+#                 "userId" : todos.userId,
+#                 "id"     : todos.id,
+#                 "title"  : todos.title
+#             })
+#         return  jsonify(dictApi)
+#     elif request.method=='DELETE':
+#         Albums = Comment.query.filter_by(postId=post_id)
+#         for album in Albums:
+#             album.archive=False
+#         return  "DELETED"
+#     else:
+#         return "ERROR"
 
 
 
@@ -424,7 +437,7 @@ def apiAlbumId(album_id):
         db.session.commit()
         return  jsonify({"PUT OK":req})
     #DELETE A ALBUM BY ID
-    elif request.method=='DELETE':  
+    elif request.method=='DELETE':
         album = Album.query.filter_by(id=album_id).first()
         dictApi = {
             "userId" : album.userId,
@@ -433,7 +446,7 @@ def apiAlbumId(album_id):
         }
         album.archive = True
         db.session.commit()
-        return  jsonify({"DELETE OK":dictApi})    
+        return  jsonify({"DELETE OK":dictApi})
     else:
         return "ERROR"
 
@@ -526,7 +539,7 @@ def apiPhotoId(photo_id):
         db.session.commit()
         return  jsonify({"PUT OK":req})
     #DELETE A PHOTO BY ID
-    elif request.method=='DELETE':  
+    elif request.method=='DELETE':
         photo = Photo.query.filter_by(id=photo_id).first()
         dictApi = {
             "id"           : getId(Photo),
@@ -538,7 +551,7 @@ def apiPhotoId(photo_id):
         }
         photo.archive = True
         db.session.commit()
-        return  jsonify({"DELETE OK":dictApi})    
+        return  jsonify({"DELETE OK":dictApi})
     else:
         return "ERROR"
 
@@ -546,4 +559,3 @@ def apiPhotoId(photo_id):
 
 if __name__=='__main__':
     app.run(debug=True)
-
