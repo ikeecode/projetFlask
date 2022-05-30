@@ -4,11 +4,7 @@ from flask_migrate import Migrate
 from flask_login import UserMixin
 
 app = Flask(__name__)
-<<<<<<< HEAD
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://marieme:marieme@localhost/flasko'
-=======
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kaba:ikeecode@localhost/flasko'
->>>>>>> 43b75942c42c93896b46e523bff1d9013be4595d
 app.config['SECRET_KEY'] = "kfvbsdkfgsfgnkg(_çty( fdbdsd))"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
@@ -146,3 +142,17 @@ class Comment(db.Model):
 
     def __str__(self):
         return f"Comment(postId:{self.postId}, id:{self.id}, name:{self.name}, email:{self.email})"
+
+
+
+class Utilisateur(db.Model):
+    __tablename__ ='utilisateurs'
+    id       = db.Column(db.Integer, primary_key=True, nullable=False)
+    email    = db.Column(db.String(200), unique=True, nullable=False, index=True)
+    password = db.Column(db.String(200), nullable=False)
+    profil   = db.Column(db.String(200), nullable=False)
+
+    def __str__(self):
+        return f"Utilisateur(email:{self.email}, password:{self.password}, status:{self.profil}"
+
+

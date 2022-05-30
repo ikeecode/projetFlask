@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/api.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIS</title>
+</head>
+<table id="listUsers">
+    <h3>USER</h3>
+    <thead>
+        <th>API</th>
+    </thead>
+    <tr>
+        <td><a href="{{ url_for('apiUsersGet') }}">USERS</a></td>
+    </tr>
+    <tr>
+        <td><a href="{{ url_for('apiPostsGet') }}">POSTS</a></td>
+    </tr>
+    <tr>
+        <td><a href="{{ url_for('apiCommentsGet') }}">COMMENTS</a></td>
+    </tr>
+    <tr>
+        <td><a href="{{ url_for('apiAlbumsGet') }}">ALBUMS</a></td>
+    </tr>
+    <tr>
+        <td><a href="{{ url_for('apiPhotosGet') }}">PHOTOS</a></td>
+    </tr>
+    <tr>
+        <td><a href="{{ url_for('apiTodosGet') }}">TODOS</a></td>
+    </tr>
+
+    <body>
+
+    </body>
+
+</html>
