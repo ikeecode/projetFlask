@@ -143,3 +143,15 @@ class Comment(db.Model):
 
     def __str__(self):
         return f"Comment(postId:{self.postId}, id:{self.id}, name:{self.name}, email:{self.email})"
+
+
+
+class Utilisateur(db.Model):
+    __tablename__ ='utilisateurs'
+    id       = db.Column(db.Integer, primary_key=True, nullable=False)
+    email    = db.Column(db.String(200), unique=True, nullable=False, index=True)
+    password = db.Column(db.String(200), nullable=False)
+    profil   = db.Column(db.String(200), nullable=False)
+
+    def __str__(self):
+        return f"Utilisateur(email:{self.email}, password:{self.password}, status:{self.profil}"

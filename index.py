@@ -1309,7 +1309,6 @@ def comment(comment_id):
             'email' : comment.email,
             'body' : comment.body,
     }
-
     return data
 
 

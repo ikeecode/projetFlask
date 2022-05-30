@@ -282,25 +282,25 @@ def apiPostAlbums(post_id):
 
 # marieme tu dois vraiment mexpliquer ca
 
-# @app.route('/api/posts/<int:post_id>/todos', methods=['GET','DELETE'])
-# def apiPostTodos(post_id):
-#     dictApi = []
-#     if request.method=='GET':
-#         Posts = Post.query.filter_by(id=post_id).first()
-#         for todos in list(Posts.albums):
-#             dictApi.append({
-#                 "userId" : todos.userId,
-#                 "id"     : todos.id,
-#                 "title"  : todos.title
-#             })
-#         return  jsonify(dictApi)
-#     elif request.method=='DELETE':
-#         Albums = Comment.query.filter_by(postId=post_id)
-#         for album in Albums:
-#             album.archive=False
-#         return  "DELETED"
-#     else:
-#         return "ERROR"
+    # @app.route('/api/posts/<int:post_id>/todos', methods=['GET','DELETE'])
+    # def apiPostTodos(post_id):
+    #     dictApi = []
+    #     if request.method=='GET':
+    #         Posts = Post.query.filter_by(id=post_id).first()
+    #         for todos in list(Posts.albums):
+    #             dictApi.append({
+    #                 "userId" : todos.userId,
+    #                 "id"     : todos.id,
+    #                 "title"  : todos.title
+    #             })
+    #         return  jsonify(dictApi)
+    #     elif request.method=='DELETE':
+    #         Albums = Comment.query.filter_by(postId=post_id)
+    #         for album in Albums:
+    #             album.archive=False
+    #         return  "DELETED"
+    #     else:
+    #         return "ERROR"
 
 
 

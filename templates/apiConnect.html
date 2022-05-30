@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion API</title>
+</head>
+
+<body>
+    <div>
+        <form action="" method="post">
+            <p id="titleAddUser">Se connecter à l'api</p>
+            <div class="champ">
+                <p>Email</p>
+                <div>
+                    <input name="email" class="champForm" type="text" placeholder="Votre mail">
+                </div>
+            </div>
+            <div class="champ">
+                <p>Mot de passe</p>
+                <div>
+                    <input name="password" class="champForm" type="text" placeholder="Votre mot de passe">
+                </div>
+            </div>
+            <div class="champ">
+                <button type="submit" name="add">Se connecter</button>
+            </div>
+            <div class="champ">
+                <p>Créer un utilisateur</p>
+            </div>
+        </form>
+        <div class="champ">
+            <button type="submit" name="addutilisateur"><a href="{{ url_for('apiAddUtilisateurGet') }}">Ajouter</a></button>
+        </div>
+    </div>
+</body>
+
+</html>
